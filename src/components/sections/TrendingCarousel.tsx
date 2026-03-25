@@ -79,8 +79,9 @@ export default function TrendingCarousel() {
     const scale = isCenter ? 1 : absOffset === 1 ? 0.85 : 0.72;
     // Progressive opacity: center=1, ±1=0.6, ±2=0.35
     const opacity = isCenter ? 1 : absOffset === 1 ? 0.6 : 0.35;
-    // Horizontal spread
-    const translateX = offset * 300;
+    // Horizontal spread — tighter on mobile
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    const translateX = offset * (isMobile ? 180 : 300);
     // Vertical lift for center
     const translateY = isCenter ? -8 : absOffset === 1 ? 0 : 8;
 
@@ -91,7 +92,7 @@ export default function TrendingCarousel() {
       transition: isDragging ? "none" : "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
       position: "absolute",
       left: "50%",
-      marginLeft: "-160px",
+      marginLeft: isMobile ? "-120px" : "-160px",
       filter: isCenter ? "none" : `blur(${absOffset * 0.5}px)`,
       pointerEvents: isCenter ? "auto" as const : "auto" as const,
     };
@@ -123,7 +124,7 @@ export default function TrendingCarousel() {
 
         {/* Carousel */}
         <div
-          className="relative h-[440px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
+          className="relative h-[360px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
@@ -139,7 +140,7 @@ export default function TrendingCarousel() {
             return (
               <div
                 key={product.id}
-                className="w-[320px]"
+                className="w-[240px] sm:w-[320px]"
                 style={style}
                 onClick={(e) => {
                   if (isDragging) { e.preventDefault(); e.stopPropagation(); return; }

@@ -113,15 +113,15 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline */}
-            <p className={`text-lg sm:text-xl md:text-2xl text-white/80 mt-3 sm:mt-5 font-light leading-snug ${
+            <p className={`text-lg sm:text-xl md:text-2xl text-white/90 mt-3 sm:mt-5 font-medium leading-snug ${
               mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
             }`}>
               Wrap Your World in{" "}
-              <span className="text-white font-semibold">Style</span>
+              <span className="text-white font-bold">Style</span>
             </p>
 
             {/* Description — hidden on mobile to save space */}
-            <p className={`hidden sm:block text-sm text-white/60 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed ${
+            <p className={`hidden sm:block text-sm sm:text-base text-white/70 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium ${
               mounted ? "hero-text-animate hero-text-animate-delay-2" : "opacity-0"
             }`}>
               Premium MagSafe, Carbon Fiber & Aramid cases. Military-grade protection meets stunning design.
