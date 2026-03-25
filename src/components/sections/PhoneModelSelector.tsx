@@ -249,7 +249,7 @@ export default function PhoneModelSelector() {
                     <button
                       key={model}
                       onClick={() => handleModelClick(model)}
-                      className="group relative w-[105px] sm:w-[170px] flex-shrink-0 bg-white rounded-xl sm:rounded-2xl border border-gray-150 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 overflow-hidden"
+                      className="group relative w-[85px] sm:w-[170px] flex-shrink-0 bg-white rounded-xl sm:rounded-2xl border border-gray-150 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 overflow-hidden"
                     >
                       {/* Product image thumbnail */}
                       <div className="relative aspect-square bg-gradient-to-b from-gray-50 to-white overflow-hidden">

@@ -75,13 +75,13 @@ export default function TrendingCarousel() {
     if (absOffset > 2) return { display: "none" };
 
     const isCenter = offset === 0;
-    // Progressive scaling: center=1, ±1=0.85, ±2=0.72
-    const scale = isCenter ? 1 : absOffset === 1 ? 0.85 : 0.72;
-    // Progressive opacity: center=1, ±1=0.6, ±2=0.35
-    const opacity = isCenter ? 1 : absOffset === 1 ? 0.6 : 0.35;
-    // Horizontal spread — tighter on mobile
+    // Progressive scaling: center=1, ±1=0.88, ±2=0.76
+    const scale = isCenter ? 1 : absOffset === 1 ? 0.88 : 0.76;
+    // Progressive opacity: center=1, ±1=0.7, ±2=0.45
+    const opacity = isCenter ? 1 : absOffset === 1 ? 0.7 : 0.45;
+    // Horizontal spread — tighter on mobile to show more cards
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-    const translateX = offset * (isMobile ? 180 : 300);
+    const translateX = offset * (isMobile ? 130 : 280);
     // Vertical lift for center
     const translateY = isCenter ? -8 : absOffset === 1 ? 0 : 8;
 
@@ -92,8 +92,8 @@ export default function TrendingCarousel() {
       transition: isDragging ? "none" : "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
       position: "absolute",
       left: "50%",
-      marginLeft: isMobile ? "-120px" : "-160px",
-      filter: isCenter ? "none" : `blur(${absOffset * 0.5}px)`,
+      marginLeft: isMobile ? "-100px" : "-160px",
+      filter: isCenter ? "none" : `blur(${absOffset * 0.3}px)`,
       pointerEvents: isCenter ? "auto" as const : "auto" as const,
     };
   };
@@ -124,7 +124,7 @@ export default function TrendingCarousel() {
 
         {/* Carousel */}
         <div
-          className="relative h-[360px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
+          className="relative h-[310px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
@@ -140,7 +140,7 @@ export default function TrendingCarousel() {
             return (
               <div
                 key={product.id}
-                className="w-[240px] sm:w-[320px]"
+                className="w-[200px] sm:w-[320px]"
                 style={style}
                 onClick={(e) => {
                   if (isDragging) { e.preventDefault(); e.stopPropagation(); return; }
