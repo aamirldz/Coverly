@@ -36,7 +36,19 @@ export default function HeroSection() {
       className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
     >
       {/* ── BACKGROUND ── */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/80 to-orange-50/40" />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      >
+        <source src="/hero-background.mp4" type="video/mp4" />
+      </video>
+      {/* Ambient overlays to ensure text remains highly readable */}
+      <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-gray-50/50 to-orange-50/40" />
+
       <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px]" />
       <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px]" />
 
