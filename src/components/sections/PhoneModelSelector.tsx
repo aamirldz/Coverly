@@ -91,7 +91,6 @@ export default function PhoneModelSelector() {
   }, [products, activeBrand]);
 
   // Model data: count + thumbnail (ONLY from same brand)
-  // Uses admin-set custom images when available
   const modelData = useMemo(() => {
     const data: Record<string, { count: number; image: string }> = {};
     products.filter((p) => p.status === "published" && p.phoneBrand === activeBrand).forEach((p) => {
@@ -102,8 +101,6 @@ export default function PhoneModelSelector() {
     });
     return data;
   }, [products, activeBrand]);
-
-
 
   const handleModelClick = (model: string) => {
     router.push(`/products/model/${encodeURIComponent(model)}`);
@@ -252,41 +249,34 @@ export default function PhoneModelSelector() {
                     <button
                       key={model}
                       onClick={() => handleModelClick(model)}
-                      className="group flex flex-col items-center gap-2 transition-all duration-300"
+                      className="group relative w-[150px] sm:w-[170px] bg-white rounded-2xl border border-gray-150 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 overflow-hidden"
                     >
-                      {/* Circular image with ring */}
-                      <div className="relative w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]">
-                        {/* Outer dashed ring */}
-                        <div className="absolute inset-0 rounded-full border-[1.5px] border-dashed border-gray-200/60 scale-[1.15] group-hover:border-accent/30 transition-colors duration-300" />
-                        {/* Inner ring + shadow */}
-                        <div className="absolute inset-0 rounded-full ring-1 ring-gray-100 group-hover:ring-accent/25 group-hover:shadow-lg group-hover:shadow-accent/8 transition-all duration-300" />
-                        {/* Image container — perfectly circular */}
-                        <div className="absolute inset-[4px] rounded-full overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-                          {data.image ? (
-                            <Image
-                              src={data.image}
-                              alt={model}
-                              fill
-                              className="object-cover group-hover:scale-110 transition-transform duration-500"
-                              sizes="140px"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <svg className="w-10 h-10 text-gray-200" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M15.5 1h-8A2.5 2.5 0 005 3.5v17A2.5 2.5 0 007.5 23h8a2.5 2.5 0 002.5-2.5v-17A2.5 2.5 0 0015.5 1z" />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
+                      {/* Product image thumbnail */}
+                      <div className="relative aspect-square bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+                        {data.image ? (
+                          <Image
+                            src={data.image}
+                            alt={model}
+                            fill
+                            className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                            sizes="170px"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-12 h-12 text-gray-200" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M15.5 1h-8A2.5 2.5 0 005 3.5v17A2.5 2.5 0 007.5 23h8a2.5 2.5 0 002.5-2.5v-17A2.5 2.5 0 0015.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z" />
+                            </svg>
+                          </div>
+                        )}
                         {/* Count badge */}
                         {data.count > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold min-w-[22px] h-[22px] rounded-full flex items-center justify-center shadow-sm z-10">
+                          <span className="absolute top-2.5 right-2.5 bg-accent text-white text-[10px] font-bold min-w-[22px] h-[22px] rounded-full flex items-center justify-center shadow-sm">
                             {data.count}
                           </span>
                         )}
                       </div>
                       {/* Label */}
-                      <div className="text-center">
+                      <div className="px-3 py-3 border-t border-gray-100">
                         <p className="text-[13px] font-semibold text-text-primary group-hover:text-accent transition-colors leading-tight">
                           {model.replace("iPhone ", "").replace("Galaxy ", "")}
                         </p>

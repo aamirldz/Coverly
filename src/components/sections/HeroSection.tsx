@@ -47,9 +47,6 @@ export default function HeroSection() {
         <source src="/hero-background.mp4" type="video/mp4" />
       </video>
 
-      {/* Very subtle overlay for text readability — NOT white, just a light tint */}
-      <div className="absolute inset-0 bg-white/30 z-[1]" />
-
       {/* Decorative gradient blobs */}
       <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
       <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px] z-[2]" />
