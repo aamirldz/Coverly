@@ -1,0 +1,10 @@
+name = "coverly"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "coverly-db"
+database_id = "757c3650-1317-4672-ac94-6773a7c10bbd"

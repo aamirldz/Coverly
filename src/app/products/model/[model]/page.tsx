@@ -1,5 +1,7 @@
 "use client";
 
+export const runtime = "edge";
+
 import { useParams } from "next/navigation";
 import { useProductStore } from "@/hooks/useProducts";
 import { useEffect, useMemo } from "react";

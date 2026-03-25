@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout
+Disallow: /order-confirmation
+
+Sitemap: https://luxewrapindia.com/sitemap.xml
