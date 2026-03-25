@@ -16,8 +16,8 @@ export default function TrendingCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
   const dragStartX = useRef(0);
-  const dragCurrentX = useRef(0);
 
   useEffect(() => { initProducts(); }, [initProducts]);
 
@@ -43,24 +43,26 @@ export default function TrendingCarousel() {
     setActiveIndex(((idx % total) + total) % total);
   }, [total]);
 
-  // Drag handlers
+  // Drag handlers — real-time tracking
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
+    setDragOffset(0);
     dragStartX.current = e.clientX;
-    dragCurrentX.current = e.clientX;
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
   };
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
-    dragCurrentX.current = e.clientX;
+    const diff = e.clientX - dragStartX.current;
+    setDragOffset(diff);
   };
   const handlePointerUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    const diff = dragStartX.current - dragCurrentX.current;
-    if (Math.abs(diff) > 50) {
-      diff > 0 ? goTo(activeIndex + 1) : goTo(activeIndex - 1);
+    // Snap to next/prev if dragged far enough (30px threshold)
+    if (Math.abs(dragOffset) > 30) {
+      dragOffset < 0 ? goTo(activeIndex + 1) : goTo(activeIndex - 1);
     }
+    setDragOffset(0);
   };
 
   if (total === 0) return null;
@@ -86,7 +88,7 @@ export default function TrendingCarousel() {
     const translateY = isCenter ? -8 : absOffset === 1 ? 0 : 8;
 
     return {
-      transform: `translateX(${translateX}px) scale(${scale}) translateY(${translateY}px)`,
+      transform: `translateX(${translateX + (isDragging ? dragOffset : 0)}px) scale(${scale}) translateY(${translateY}px)`,
       opacity,
       zIndex: 10 - absOffset,
       transition: isDragging ? "none" : "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
@@ -125,6 +127,7 @@ export default function TrendingCarousel() {
         {/* Carousel */}
         <div
           className="relative h-[310px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
+          style={{ touchAction: 'pan-y' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onPointerDown={handlePointerDown}
