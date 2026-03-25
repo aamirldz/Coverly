@@ -43,8 +43,7 @@ export default function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover z-[0]"
       >
-        {/* TODO: Replace with your Cloudflare R2 public URL for full 160MB quality */}
-        <source src="/hero-background.mp4" type="video/mp4" />
+        <source src="https://github.com/aamirldz/Coverly/releases/download/v1.0.0/hero-background.mp4" type="video/mp4" />
       </video>
 
       {/* Decorative gradient blobs */}
