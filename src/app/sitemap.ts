@@ -1,26 +1,22 @@
 import type { MetadataRoute } from "next";
+import { SAMPLE_PRODUCTS } from "@/lib/sample-data";
 
 // ═══════════════════════════════════════════
 // SITEMAP — Auto-generated for SEO
+// Dynamically pulls slugs from product data
 // Lists all public pages for Google crawlers
 // ═══════════════════════════════════════════
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://luxewrapindia.com";
 
-  // Static pages
+  // Static pages — only pages that actually exist in the app
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/checkout`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
     },
     {
       url: `${baseUrl}/track-order`,
@@ -30,36 +26,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Product pages — dynamically from sample data
-  // In production, this would query the database
-  const productSlugs = [
-    "carbon-fiber-ultra-case",
-    "magsafe-clear-case",
-    "aramid-stealth-case",
-    "leather-executive-case",
-    "cute-blossom-case",
-    "carbon-fiber-pro-case",
-    "magsafe-midnight-case",
-    "aramid-shield-case",
-    "cute-lavender-dreams",
-    "leather-classic-brown",
-  ];
+  // Product pages — dynamically from actual product data
+  const productPages: MetadataRoute.Sitemap = SAMPLE_PRODUCTS
+    .filter((p) => p.status === "published")
+    .map((product) => ({
+      url: `${baseUrl}/products/${product.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
 
-  const productPages: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
-    url: `${baseUrl}/products/${slug}`,
+  // Model collection pages — based on unique phone models in product data
+  const uniqueBrands = [...new Set(SAMPLE_PRODUCTS.map((p) => p.phoneBrand))];
+  const brandPages: MetadataRoute.Sitemap = uniqueBrands.map((brand) => ({
+    url: `${baseUrl}/products/model/${encodeURIComponent(brand)}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: 0.8,
+    priority: 0.7,
   }));
 
-  // Collection pages
-  const collectionPages: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}/collections?brand=Apple`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.7 },
-    { url: `${baseUrl}/collections?brand=Samsung`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.7 },
-    { url: `${baseUrl}/collections?type=MagSafe`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.6 },
-    { url: `${baseUrl}/collections?type=Carbon+Fiber`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.6 },
-    { url: `${baseUrl}/collections?type=Aramid+Fiber`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.6 },
-  ];
-
-  return [...staticPages, ...productPages, ...collectionPages];
+  return [...staticPages, ...productPages, ...brandPages];
 }

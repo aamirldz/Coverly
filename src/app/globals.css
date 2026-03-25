@@ -209,21 +209,6 @@ a, button, input, select, textarea {
   animation: whatsapp-pulse 2s infinite;
 }
 
-/* === 3D CANVAS FIXED BACKGROUND === */
-.canvas-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.canvas-container.interactive {
-  pointer-events: auto;
-}
-
 /* === HERO TEXT ANIMATION === */
 @keyframes hero-text-reveal {
   0% { opacity: 0; transform: translateY(30px); filter: blur(8px); }
