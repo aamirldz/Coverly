@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════
+   LUXEWRAP INDIA — GLOBAL DESIGN SYSTEM
+   Brand: Premium White Theme + Orange #FA7000
+   Fonts: Playfair Display (heading) + Inter (body)
+   Loaded via next/font for optimal performance
+   ═══════════════════════════════════════════ */
+
+/* === SCROLLBAR: Hidden for immersive feel === */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* === BASE STYLES === */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #111111;
+  font-family: var(--font-body), 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === SELECTION COLOR === */
+::selection {
+  background-color: rgba(250, 112, 0, 0.2);
+  color: #111111;
+}
+
+/* === ACCESSIBILITY: Focus Styles === */
+/* Visible focus ring for keyboard navigation only */
+*:focus-visible {
+  outline: 2px solid #FA7000;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to main content link (screen readers + keyboard) */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #FA7000;
+  color: white;
+  padding: 8px 16px;
+  z-index: 10000;
+  font-size: 14px;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === SMOOTH TRANSITIONS ON ALL INTERACTIVE ELEMENTS === */
+a, button, input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === SCROLLBAR HIDE (for horizontal scroll areas) === */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* === SLOW SPIN (hero ring decoration) === */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 30s linear infinite;
+}
+
+/* === PRODUCT CARD 3D TILT SYSTEM === */
+.product-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+.product-card:hover {
+  box-shadow: 0 20px 60px rgba(250, 112, 0, 0.15);
+}
+
+.product-card .glow-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+
+.product-card:hover .glow-overlay {
+  opacity: 1;
+}
+
+/* Card add-to-cart button slide-up */
+.product-card .cart-button-wrapper {
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .cart-button-wrapper {
+  transform: translateY(0);
+}
+
+/* Card video overlay */
+.product-card .video-layer {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .video-layer {
+  opacity: 1;
+}
+
+/* === GLASSMORPHISM UTILITY === */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* === NAVBAR SHRINK ON SCROLL === */
+.navbar-scrolled {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* === ORANGE GRADIENT TEXT === */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #FA7000, #FF8C33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === BADGE STYLES === */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-new { background: #FA7000; color: white; }
+.badge-bestseller { background: #D4A017; color: white; }
+.badge-forher { background: #EC4899; color: white; }
+.badge-lowstock { background: #EF4444; color: white; }
+
+/* === ANNOUNCEMENT BAR ANIMATION === */
+@keyframes slide-announcement {
+  0% { transform: translateY(100%); opacity: 0; }
+  10% { transform: translateY(0); opacity: 1; }
+  90% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* === FLOATING WHATSAPP PULSE === */
+@keyframes whatsapp-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.whatsapp-btn {
+  animation: whatsapp-pulse 2s infinite;
+}
+
+/* === 3D CANVAS FIXED BACKGROUND === */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.canvas-container.interactive {
+  pointer-events: auto;
+}
+
+/* === HERO TEXT ANIMATION === */
+@keyframes hero-text-reveal {
+  0% { opacity: 0; transform: translateY(30px); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.hero-text-animate {
+  animation: hero-text-reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-text-animate-delay-1 { animation-delay: 0.2s; opacity: 0; }
+.hero-text-animate-delay-2 { animation-delay: 0.4s; opacity: 0; }
+.hero-text-animate-delay-3 { animation-delay: 0.6s; opacity: 0; }
+
+/* === HERO FLOATING BADGES === */
+@keyframes hero-badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-float-badge {
+  animation: hero-badge-float 3s ease-in-out infinite;
+}
+
+/* === STAR RATING === */
+.star-filled { color: #FA7000; }
+.star-empty { color: #D1D5DB; }
+
+/* === RESPONSIVE HELPERS === */
+@media (max-width: 768px) {
+  .product-card .cart-button-wrapper {
+    transform: translateY(0); /* Always visible on mobile */
+  }
+}
+
+/* === PAGE TRANSITION === */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
