@@ -169,7 +169,7 @@ export default function HeroSection() {
           </div>
 
           {/* ── PRODUCT SHOWCASE ── */}
-          <div className={`relative flex justify-center lg:justify-center order-2 lg:order-2 mt-2 lg:mt-0 ${
+          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 mt-2 lg:mt-0 ${
             mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
           }`}>
             <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
