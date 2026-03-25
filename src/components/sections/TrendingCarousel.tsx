@@ -83,7 +83,7 @@ export default function TrendingCarousel() {
     const opacity = isCenter ? 1 : absOffset === 1 ? 0.7 : 0.45;
     // Horizontal spread — tighter on mobile to show more cards
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-    const translateX = offset * (isMobile ? 130 : 280);
+    const translateX = offset * (isMobile ? 115 : 280);
     // Vertical lift for center
     const translateY = isCenter ? -8 : absOffset === 1 ? 0 : 8;
 
@@ -94,14 +94,14 @@ export default function TrendingCarousel() {
       transition: isDragging ? "none" : "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
       position: "absolute",
       left: "50%",
-      marginLeft: isMobile ? "-100px" : "-160px",
+      marginLeft: isMobile ? "-88px" : "-160px",
       filter: isCenter ? "none" : `blur(${absOffset * 0.3}px)`,
       pointerEvents: isCenter ? "auto" as const : "auto" as const,
     };
   };
 
   return (
-    <section className="py-14 sm:py-20 relative overflow-hidden">
+    <section className="py-10 sm:py-20 relative overflow-hidden">
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50" />
       {/* Accent glow behind center */}
@@ -126,7 +126,7 @@ export default function TrendingCarousel() {
 
         {/* Carousel */}
         <div
-          className="relative h-[310px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
+          className="relative h-[280px] sm:h-[500px] cursor-grab active:cursor-grabbing select-none"
           style={{ touchAction: 'pan-y' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -143,7 +143,7 @@ export default function TrendingCarousel() {
             return (
               <div
                 key={product.id}
-                className="w-[200px] sm:w-[320px]"
+                className="w-[175px] sm:w-[320px]"
                 style={style}
                 onClick={(e) => {
                   if (isDragging) { e.preventDefault(); e.stopPropagation(); return; }

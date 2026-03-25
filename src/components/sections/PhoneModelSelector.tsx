@@ -242,7 +242,7 @@ export default function PhoneModelSelector() {
               </div>
 
               {/* Cards */}
-              <div className="flex overflow-x-auto sm:flex-wrap sm:overflow-visible justify-start sm:justify-center gap-2.5 sm:gap-4 pb-2 sm:pb-0 scrollbar-hide">
+              <div className="flex overflow-x-auto sm:flex-wrap sm:overflow-visible justify-start sm:justify-center gap-2 sm:gap-4 pb-2 sm:pb-0 scrollbar-hide">
                 {(models as string[]).map((model) => {
                   const data = modelData[model] || { count: 0, image: "" };
                   return (
@@ -252,13 +252,13 @@ export default function PhoneModelSelector() {
                       className="group relative w-[85px] sm:w-[170px] flex-shrink-0 bg-white rounded-xl sm:rounded-2xl border border-gray-150 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 overflow-hidden"
                     >
                       {/* Product image thumbnail */}
-                      <div className="relative aspect-square bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+                      <div className="relative aspect-[4/5] sm:aspect-square bg-gradient-to-b from-gray-50 to-white overflow-hidden">
                         {data.image ? (
                           <Image
                             src={data.image}
                             alt={model}
                             fill
-                            className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                            className="object-contain p-1 sm:p-3 group-hover:scale-105 transition-transform duration-500"
                             sizes="170px"
                           />
                         ) : (
@@ -276,8 +276,8 @@ export default function PhoneModelSelector() {
                         )}
                       </div>
                       {/* Label */}
-                      <div className="px-2 py-2 sm:px-3 sm:py-3 border-t border-gray-100">
-                        <p className="text-[11px] sm:text-[13px] font-semibold text-text-primary group-hover:text-accent transition-colors leading-tight">
+                      <div className="px-1.5 py-1.5 sm:px-3 sm:py-3 border-t border-gray-100">
+                        <p className="text-[10px] sm:text-[13px] font-semibold text-text-primary group-hover:text-accent transition-colors leading-tight text-center">
                           {model.replace("iPhone ", "").replace("Galaxy ", "")}
                         </p>
                         <p className="text-[10px] text-accent mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
