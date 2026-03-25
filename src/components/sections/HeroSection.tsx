@@ -43,7 +43,7 @@ export default function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover z-[0]"
       >
-        <source src="https://github.com/aamirldz/Coverly/releases/download/v1.0.0/hero-background.mp4" type="video/mp4" />
+        <source src="/hero-background.mp4" type="video/mp4" />
       </video>
 
       {/* Decorative gradient blobs */}
@@ -169,16 +169,12 @@ export default function HeroSection() {
           </div>
 
           {/* ── PRODUCT SHOWCASE ── */}
-          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 mt-2 lg:mt-0 ${
+          <div className={`relative flex justify-center lg:justify-center order-2 lg:order-2 mt-2 lg:mt-0 ${
             mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
           }`}>
             <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
               {/* Glow */}
               <div className="absolute inset-[-15%] bg-gradient-to-b from-accent/6 via-accent/4 to-transparent rounded-full blur-2xl" />
-
-              {/* Decorative rings */}
-              <div className="absolute inset-[-6%] border border-dashed border-accent/12 rounded-full animate-spin-slow" />
-              <div className="absolute inset-[-2%] border border-accent/6 rounded-full" />
 
               {/* Product images — crossfade, clipped to circle */}
               <div className="relative w-full h-full rounded-full overflow-hidden">
