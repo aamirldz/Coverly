@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useCartStore, getCartTotalPrice, getCartTotalMRP, getCartSavings, getCartItemCount } from "@/hooks/useCart";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, INDIAN_STATES } from "@/lib/utils";
 import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import Footer from "@/components/ui/Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
@@ -16,7 +16,7 @@ import Link from "next/link";
 // Step 3: Order summary with full breakdown
 // ═══════════════════════════════════════════
 
-interface FormData {
+interface CheckoutFormData {
   name: string;
   email: string;
   phone: string;
@@ -37,22 +37,13 @@ interface FormErrors {
   pincode?: string;
 }
 
-const INDIAN_STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-  "Delhi", "Jammu and Kashmir", "Ladakh",
-];
-
 export default function CheckoutPage() {
   const { items, clearCart } = useCartStore();
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<CheckoutFormData>({
     name: "",
     email: "",
     phone: "",

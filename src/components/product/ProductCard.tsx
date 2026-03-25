@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCartStore } from "@/hooks/useCart";
 import { useToast } from "@/components/ui/Toast";
 import { formatPrice, calculateDiscount, getBadgeClass, getBadgeText } from "@/lib/utils";
@@ -135,11 +136,12 @@ export default function ProductCard({ product }: ProductCardProps) {
             }`}
           >
             {mainImage ? (
-              <img
+              <Image
                 src={mainImage}
                 alt={product.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 175px, 320px"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
