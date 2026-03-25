@@ -90,7 +90,7 @@ export default function HeroSection() {
           <div className="text-center lg:text-left order-1 lg:order-1">
             {/* Badge */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
-              <span className="inline-flex items-center gap-2 bg-accent/8 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-accent/10">
+              <span className="inline-flex items-center gap-2 bg-accent/20 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-accent/30 backdrop-blur-sm">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
@@ -102,7 +102,7 @@ export default function HeroSection() {
             {/* Brand Name */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
               <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[0.9]">
-                <span className="text-text-primary">LUXE</span>
+                <span className="text-white">LUXE</span>
                 <span className="bg-gradient-to-r from-accent via-orange-500 to-amber-500 bg-clip-text text-transparent">WRAP</span>
               </h1>
               <div className="flex items-center gap-2 justify-center lg:justify-start mt-1">
@@ -113,15 +113,15 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline */}
-            <p className={`text-lg sm:text-xl md:text-2xl text-text-secondary mt-3 sm:mt-5 font-light leading-snug ${
+            <p className={`text-lg sm:text-xl md:text-2xl text-white/80 mt-3 sm:mt-5 font-light leading-snug ${
               mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
             }`}>
               Wrap Your World in{" "}
-              <span className="text-text-primary font-semibold">Style</span>
+              <span className="text-white font-semibold">Style</span>
             </p>
 
             {/* Description — hidden on mobile to save space */}
-            <p className={`hidden sm:block text-sm text-text-muted mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed ${
+            <p className={`hidden sm:block text-sm text-white/60 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed ${
               mounted ? "hero-text-animate hero-text-animate-delay-2" : "opacity-0"
             }`}>
               Premium MagSafe, Carbon Fiber & Aramid cases. Military-grade protection meets stunning design.
@@ -142,7 +142,7 @@ export default function HeroSection() {
               </a>
               <a
                 href="#features"
-                className="border border-gray-300 hover:border-accent text-text-secondary hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2"
+                className="border border-white/40 hover:border-accent text-white/80 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2 backdrop-blur-sm"
               >
                 EXPLORE
               </a>
@@ -154,14 +154,14 @@ export default function HeroSection() {
             }`}>
               {[
                 { value: "10K+", label: "Sold", color: "text-accent" },
-                { value: "4.9★", label: "Rating", color: "text-text-primary" },
-                { value: "MIL-STD", label: "Certified", color: "text-text-primary" },
+                { value: "4.9★", label: "Rating", color: "text-white" },
+                { value: "MIL-STD", label: "Certified", color: "text-white" },
               ].map((stat, i) => (
                 <div key={i} className="flex items-center gap-2 sm:gap-3">
-                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-gray-200" />}
+                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-white/20" />}
                   <div className={`${i > 0 ? "pl-2 sm:pl-3" : ""} text-center lg:text-left`}>
                     <p className={`text-lg sm:text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                    <p className="text-[8px] sm:text-[10px] text-text-muted uppercase tracking-widest">{stat.label}</p>
+                    <p className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-widest">{stat.label}</p>
                   </div>
                 </div>
               ))}
@@ -169,7 +169,7 @@ export default function HeroSection() {
           </div>
 
           {/* ── PRODUCT SHOWCASE ── */}
-          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 mt-2 lg:mt-0 ${
+          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 mt-2 lg:mt-0 lg:mr-[-5%] ${
             mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
           }`}>
             <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
