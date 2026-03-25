@@ -17,9 +17,18 @@ export default function TrendingCarousel() {
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const dragStartX = useRef(0);
 
   useEffect(() => { initProducts(); }, [initProducts]);
+
+  // Detect mobile on client side only (avoids SSR hydration mismatch)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Trending: featured, bestseller, or new — up to 8
   const trendingProducts = useMemo(() => {
@@ -82,7 +91,6 @@ export default function TrendingCarousel() {
     // Progressive opacity: center=1, ±1=0.7, ±2=0.45
     const opacity = isCenter ? 1 : absOffset === 1 ? 0.7 : 0.45;
     // Horizontal spread — tighter on mobile to show more cards
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
     const translateX = offset * (isMobile ? 115 : 280);
     // Vertical lift for center
     const translateY = isCenter ? -8 : absOffset === 1 ? 0 : 8;
