@@ -12,8 +12,10 @@ import { SAMPLE_PRODUCTS } from "@/lib/sample-data";
 import type { Product, Order, DashboardStats } from "@/types";
 
 // ── ADMIN CREDENTIALS ──
-const ADMIN_EMAIL = "admin@luxewrap.in";
-const ADMIN_PASSWORD = "luxewrap2026";
+// In production: set NEXT_PUBLIC_ADMIN_EMAIL and NEXT_PUBLIC_ADMIN_PASSWORD
+// in Cloudflare Pages > Settings > Environment Variables
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@luxewrap.in";
+const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "luxewrap2026";
 const AUTH_KEY = "luxewrap_admin_auth";
 
 // ── MOCK ORDER GENERATOR ──

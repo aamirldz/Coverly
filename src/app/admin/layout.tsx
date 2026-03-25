@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const isValid = checkAuth();
       if (!isValid) router.push("/admin/login");
     }
-  }, [isLoginPage, pathname]);
+  }, [isLoginPage, pathname, checkAuth, router]);
 
   if (isLoginPage) return <>{children}</>;
 
