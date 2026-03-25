@@ -13,7 +13,9 @@ interface ReviewSectionProps {
   productName: string;
 }
 
-export default function ReviewSection({ reviews, productName }: ReviewSectionProps) {
+export default function ReviewSection({ reviews: rawReviews, productName }: ReviewSectionProps) {
+  // Only show approved reviews on the storefront
+  const reviews = rawReviews.filter((r) => r.approved !== false);
   const avgRating =
     reviews.length > 0
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length

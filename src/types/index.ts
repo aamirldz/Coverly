@@ -134,3 +134,10 @@ export interface DashboardStats {
   revenueByDay: { date: string; revenue: number }[];
   ordersByStatus: { status: string; count: number }[];
 }
+
+// Hero showcase config for the big circular product rotator on homepage
+export interface HeroShowcaseItem {
+  productId: string;
+  visible: boolean;
+  order: number;
+}

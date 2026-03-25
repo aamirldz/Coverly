@@ -9,19 +9,17 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useProductStore } from "@/hooks/useProducts";
-import { SAMPLE_PRODUCTS } from "@/lib/sample-data";
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
   const [activeCase, setActiveCase] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const { products, initProducts } = useProductStore();
+  const { initProducts, getHeroProducts } = useProductStore();
 
   useEffect(() => { initProducts(); }, [initProducts]);
 
-  // Use shared store products (fallback to sample for SSR)
-  const allProducts = products.length > 0 ? products.filter((p) => p.status === "published") : SAMPLE_PRODUCTS;
-  const heroProducts = allProducts.slice(0, 3);
+  // Use admin-configured hero products (fallback handled inside getter)
+  const heroProducts = getHeroProducts();
 
   useEffect(() => {
     setMounted(true);
@@ -172,21 +170,20 @@ export default function HeroSection() {
               <div className="absolute inset-[-6%] border border-dashed border-accent/12 rounded-full animate-spin-slow" />
               <div className="absolute inset-[-2%] border border-accent/6 rounded-full" />
 
-              {/* Product images — crossfade */}
-              <div className="relative w-full h-full flex items-center justify-center">
+              {/* Product images — crossfade, clipped to circle */}
+              <div className="relative w-full h-full rounded-full overflow-hidden">
                 {heroProducts.map((product, index) => (
                   <div
                     key={product.id}
-                    className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out ${
+                    className={`absolute inset-0 transition-all duration-700 ease-out ${
                       index === activeCase ? "opacity-100 scale-100" : "opacity-0 scale-95"
                     }`}
                   >
                     <Image
                       src={product.images[0]}
                       alt={product.name}
-                      width={400}
-                      height={400}
-                      className="w-[70%] h-auto drop-shadow-2xl object-contain"
+                      fill
+                      className="object-cover"
                       priority={index === 0}
                     />
                   </div>
