@@ -35,10 +35,24 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
     >
-      {/* ── BACKGROUND ── */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/80 to-orange-50/40" />
-      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px]" />
-      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px]" />
+      {/* ── BACKGROUND VIDEO ── */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-[0]"
+      >
+        {/* TODO: Replace with your Cloudflare R2 public URL for full 160MB quality */}
+        <source src="/hero-background.mp4" type="video/mp4" />
+      </video>
+
+      {/* Very subtle overlay for text readability — NOT white, just a light tint */}
+      <div className="absolute inset-0 bg-white/30 z-[1]" />
+
+      {/* Decorative gradient blobs */}
+      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
+      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px] z-[2]" />
 
       {/* Subtle dot pattern */}
       <div
