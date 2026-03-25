@@ -36,20 +36,9 @@ export default function HeroSection() {
       className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
     >
       {/* ── BACKGROUND ── */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      >
-        {/* Replace this src with your public R2 bucket URL for the 160MB video */}
-        <source src="/hero-background.mp4" type="video/mp4" />
-      </video>
-
-      {/* Decorative colored blurred circles (subtle) */}
-      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/80 to-orange-50/40" />
+      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px]" />
+      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px]" />
 
       {/* Subtle dot pattern */}
       <div
