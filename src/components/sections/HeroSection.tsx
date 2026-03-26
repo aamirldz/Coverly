@@ -35,7 +35,7 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
     >
-      {/* ── BACKGROUND VIDEO ── */}
+      {/* ── BACKGROUND VIDEO (streamed from Google Drive) ── */}
       <video
         autoPlay
         loop
@@ -44,10 +44,8 @@ export default function HeroSection() {
         preload="auto"
         crossOrigin="anonymous"
         className="absolute inset-0 w-full h-full object-cover z-[0]"
-      >
-        <source src="https://drive.google.com/uc?export=download&id=1B9EDF5VtIQ4D49FAYa4hncv47h7ZaynF" type="video/mp4" />
-        <source src="/hero-background.mp4" type="video/mp4" />
-      </video>
+        src="https://drive.google.com/uc?export=download&id=1B9EDF5VtIQ4D49FAYa4hncv47h7ZaynF"
+      />
 
       {/* Decorative gradient blobs */}
       <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
