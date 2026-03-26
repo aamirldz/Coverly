@@ -375,18 +375,6 @@ export default function AdminProductsPage() {
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  // Initialize shared product store + sync admin store
-  useEffect(() => {
-    productStore.initProducts();
-  }, []);
-
-  // Keep admin store in sync with shared product store
-  useEffect(() => {
-    if (productStore.products.length > 0) {
-      adminStore.initData(productStore.products);
-    }
-  }, [productStore.products]);
-
   // Read products from shared store (single source of truth)
   const products = productStore.products;
   const orders = adminStore.orders;

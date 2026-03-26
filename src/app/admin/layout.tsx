@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminStore } from "@/hooks/useAdmin";
+import { useProductStore } from "@/hooks/useProducts";
 import Link from "next/link";
 
 const NAV_ITEMS = [
@@ -62,7 +63,10 @@ const NAV_ITEMS = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, checkAuth, logout, adminEmail } = useAdminStore();
+  const adminStore = useAdminStore();
+  const { isAuthenticated, checkAuth, logout, adminEmail } = adminStore;
+  const productStore = useProductStore();
+  
   const [mounted, setMounted] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -75,6 +79,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (!isValid) router.push("/admin/login");
     }
   }, [isLoginPage, pathname, checkAuth, router]);
+
+  // Global store initialization for Admin Area
+  useEffect(() => {
+    if (isAuthenticated && !isLoginPage) {
+      productStore.initProducts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, isLoginPage]);
+
+  useEffect(() => {
+    if (isAuthenticated && productStore.products.length > 0) {
+      adminStore.initData(productStore.products);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, productStore.products]);
 
   if (isLoginPage) return <>{children}</>;
 

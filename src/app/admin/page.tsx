@@ -114,7 +114,14 @@ function StatusDonut({ data }: { data: { status: string; count: number }[] }) {
 export default function AdminDashboardPage() {
   const { stats, orders, products } = useAdminStore();
 
-  if (!stats) return null;
+  if (!stats) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-[11px] text-text-muted mt-4 uppercase tracking-widest font-semibold">Loading Dashboard</p>
+      </div>
+    );
+  }
 
   const recentOrders = orders.slice(0, 6);
   const lowStockProducts = products.filter((p) => p.stockQty > 0 && p.stockQty <= 5);
