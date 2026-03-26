@@ -98,8 +98,9 @@ export default function Navbar() {
 
             {/* Dropdown Menu */}
             {shopDropdownOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl p-5 animate-fade-in shadow-xl border border-gray-100">
-                {/* By Brand */}
+              <div className="absolute top-full left-0 pt-2 w-64 z-50">
+                <div className="bg-white rounded-2xl p-5 animate-fade-in shadow-xl border border-gray-100">
+                  {/* By Brand */}
                 <p className="text-[10px] text-text-muted uppercase tracking-widest mb-2 font-semibold">
                   By Brand
                 </p>
@@ -150,6 +151,7 @@ export default function Navbar() {
                 >
                   Browse All Devices →
                 </button>
+                </div>
               </div>
             )}
           </div>
@@ -244,19 +246,20 @@ export default function Navbar() {
           >
             🔍 Find Your Case
           </button>
-          {(brands.length > 0 ? brands : ["Apple", "Samsung"]).map((brand) => (
-            <button
-              key={brand}
-              onClick={() => {
-                const firstModel = products.find((p) => p.phoneBrand === brand && p.status === "published");
-                if (firstModel) router.push(`/products/model/${encodeURIComponent(firstModel.phoneModel)}`);
-                setMobileMenuOpen(false);
-              }}
-              className="block w-full text-left py-3 text-text-secondary hover:text-accent transition-colors"
-            >
-              {brand === "Apple" ? "iPhone Cases" : `${brand} Cases`}
-            </button>
-          ))}
+          {(brands.length > 0 ? brands : ["Apple", "Samsung"]).map((brand) => {
+            const firstModel = products.find((p) => p.phoneBrand === brand && p.status === "published");
+            const href = firstModel ? `/products/model/${encodeURIComponent(firstModel.phoneModel)}` : "#";
+            return (
+              <Link
+                key={brand}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block w-full text-left py-3 text-text-secondary hover:text-accent transition-colors"
+              >
+                {brand === "Apple" ? "iPhone Cases" : `${brand} Cases`}
+              </Link>
+            );
+          })}
           <Link
             href="/track-order"
             onClick={() => setMobileMenuOpen(false)}
