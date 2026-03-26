@@ -42,10 +42,12 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover z-[0]"
+        className="absolute inset-0 w-full h-full object-cover z-[0] brightness-75 contrast-75"
       >
         <source src="/hero-background.mp4" type="video/mp4" />
       </video>
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/40 z-[1]" />
 
       {/* Decorative gradient blobs */}
       <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
