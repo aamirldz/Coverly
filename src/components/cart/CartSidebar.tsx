@@ -25,14 +25,14 @@ export default function CartSidebar() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-fade-in"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] animate-fade-in"
         onClick={closeCart}
         aria-hidden="true"
       />
 
       {/* Sidebar */}
       <div
-        className="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 border-l border-gray-200 flex flex-col shadow-2xl"
+        className="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[100] border-l border-gray-200 flex flex-col shadow-2xl"
         role="dialog"
         aria-label="Shopping cart"
         aria-modal="true"
