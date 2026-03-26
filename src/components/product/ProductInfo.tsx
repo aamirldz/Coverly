@@ -24,6 +24,13 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   const { showToast } = useToast();
   const router = useRouter();
 
+  // Prefetch checkout so Buy Now is instantaneous
+  import("react").then((React) => {
+    React.useEffect(() => {
+      router.prefetch("/checkout");
+    }, [router]);
+  });
+
   const discount = calculateDiscount(product.price, product.mrp);
   const mainImage = product.images?.[0] || "";
   const avgRating =

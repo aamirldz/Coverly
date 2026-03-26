@@ -134,7 +134,7 @@ export default function HeroSection() {
             <div className={`flex flex-row gap-2.5 justify-center lg:justify-start mt-4 sm:mt-6 ${
               mounted ? "hero-text-animate hero-text-animate-delay-2" : "opacity-0"
             }`}>
-              <a
+              <Link
                 href="#products"
                 className="group bg-accent hover:bg-accent-dark text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm tracking-wide transition-all hover:shadow-glow hover:translate-y-[-2px] flex items-center gap-2"
               >
@@ -142,13 +142,13 @@ export default function HeroSection() {
                 <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#features"
                 className="border border-white/40 hover:border-accent text-white/80 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2 backdrop-blur-sm"
               >
                 EXPLORE
-              </a>
+              </Link>
             </div>
 
             {/* Stats — compact on mobile */}
