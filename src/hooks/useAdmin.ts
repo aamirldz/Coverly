@@ -8,6 +8,7 @@
 // ═══════════════════════════════════════════
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { SAMPLE_PRODUCTS } from "@/lib/sample-data";
 import type { Product, Order, DashboardStats } from "@/types";
 
@@ -176,7 +177,9 @@ interface AdminStore {
   refreshProducts: (products: Product[]) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set, get) => ({
+export const useAdminStore = create<AdminStore>()(
+  persist(
+    (set, get) => ({
   isAuthenticated: false,
   adminEmail: null,
   orders: [],
@@ -199,7 +202,7 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     if (typeof window !== "undefined") {
       localStorage.removeItem(AUTH_KEY);
     }
-    set({ isAuthenticated: false, adminEmail: null, orders: [], products: [], stats: null });
+    set({ isAuthenticated: false, adminEmail: null });
   },
 
   checkAuth: () => {
@@ -282,4 +285,9 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     const stats = calculateDashboardStats(get().orders, products);
     set({ products, stats });
   },
-}));
+}),
+{
+  name: "luxewrap-admin-store",
+}
+)
+);
