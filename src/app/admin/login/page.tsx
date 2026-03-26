@@ -163,11 +163,11 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          {/* Security note */}
+          {/* Hint */}
           <div className="mt-8 pt-6 border-t border-gray-100">
-            <div className="bg-gray-50 rounded-xl px-4 py-3">
+            <div className="bg-accent/5 rounded-xl px-4 py-3">
               <p className="text-[11px] text-text-muted text-center font-body">
-                Authorized personnel only. All access is logged.
+                <span className="font-semibold text-text-secondary">Demo:</span> admin@luxewrap.in / luxewrap2026
               </p>
             </div>
           </div>

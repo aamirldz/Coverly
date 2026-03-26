@@ -1,15 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Navbar from "@/components/ui/Navbar";
 import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import HeroSection from "@/components/sections/HeroSection";
 import TrustSection from "@/components/sections/TrustSection";
-import PhoneModelSelector from "@/components/sections/PhoneModelSelector";
-import TrendingCarousel from "@/components/sections/TrendingCarousel";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import Footer from "@/components/ui/Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import CartSidebar from "@/components/cart/CartSidebar";
+
+// Lazy-load below-fold sections for faster initial load
+const PhoneModelSelector = dynamic(() => import("@/components/sections/PhoneModelSelector"), { ssr: false });
+const TrendingCarousel = dynamic(() => import("@/components/sections/TrendingCarousel"), { ssr: false });
+const TestimonialsSection = dynamic(() => import("@/components/sections/TestimonialsSection"), { ssr: false });
 
 // ═══════════════════════════════════════════
 // HOMEPAGE — Compact page assembly
