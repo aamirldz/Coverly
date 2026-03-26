@@ -42,8 +42,10 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
+        crossOrigin="anonymous"
         className="absolute inset-0 w-full h-full object-cover z-[0]"
       >
+        <source src="https://drive.google.com/uc?export=download&id=1B9EDF5VtIQ4D49FAYa4hncv47h7ZaynF" type="video/mp4" />
         <source src="/hero-background.mp4" type="video/mp4" />
       </video>
 
