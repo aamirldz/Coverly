@@ -44,7 +44,7 @@ export default function TrendingCarousel() {
     if (isHovered || isDragging || total <= 1) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % total);
-    }, 3000);
+    }, 2000);
     return () => clearInterval(timer);
   }, [isHovered, isDragging, total]);
 
@@ -99,7 +99,7 @@ export default function TrendingCarousel() {
       transform: `translateX(${translateX + (isDragging ? dragOffset : 0)}px) scale(${scale}) translateY(${translateY}px)`,
       opacity,
       zIndex: 10 - absOffset,
-      transition: isDragging ? "none" : "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+      transition: isDragging ? "none" : "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
       position: "absolute",
       left: "50%",
       marginLeft: isMobile ? "-88px" : "-160px",
