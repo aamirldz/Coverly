@@ -155,80 +155,83 @@ export default function HeroSection() {
           </div>
 
           {/* ── PRODUCT SHOWCASE ── */}
-          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 -translate-y-8 lg:-translate-y-24 lg:mr-[-5%] ${
+          <div className={`relative flex justify-center lg:justify-end order-2 lg:order-2 lg:mr-[-5%] ${
             mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
           }`}>
-            <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              {/* Glow */}
-              <div className="absolute inset-[-15%] bg-gradient-to-b from-accent/6 via-accent/4 to-transparent rounded-full blur-2xl" />
+            {/* Inner wrapper to apply vertical lift without being overridden by the entrance animation transform */}
+            <div className="-translate-y-8 lg:-translate-y-24">
+              <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+                {/* Glow */}
+                <div className="absolute inset-[-15%] bg-gradient-to-b from-accent/6 via-accent/4 to-transparent rounded-full blur-2xl" />
 
-              {/* Product images — crossfade, clipped to circle */}
-              <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl ring-1 ring-gray-100">
-                {heroProducts.map((product, index) => (
-                  <div
-                    key={product.id}
-                    className={`absolute inset-0 transition-all duration-700 ease-out ${
-                      index === activeCase ? "opacity-100 scale-100" : "opacity-0 scale-95"
-                    }`}
-                  >
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                      priority={index === 0}
-                      sizes="(max-width: 640px) 200px, (max-width: 1024px) 320px, 400px"
+                {/* Product images — crossfade, clipped to circle */}
+                <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl ring-1 ring-gray-100">
+                  {heroProducts.map((product, index) => (
+                    <div
+                      key={product.id}
+                      className={`absolute inset-0 transition-all duration-700 ease-out ${
+                        index === activeCase ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                      }`}
+                    >
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                        priority={index === 0}
+                        sizes="(max-width: 640px) 200px, (max-width: 1024px) 320px, 400px"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Case name label */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-100 rounded-full px-3 py-1 shadow-sm z-20">
+                  <p className="text-[9px] sm:text-xs font-semibold text-gray-900 whitespace-nowrap">
+                    {heroProducts[activeCase]?.name}
+                  </p>
+                </div>
+
+                {/* Floating badges */}
+                <div className="hidden sm:block absolute top-2 -left-4 bg-white rounded-xl shadow-lg border border-gray-100 px-2.5 py-1.5 z-20 hero-float-badge">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-900">MIL-STD 810G</p>
+                      <p className="text-[8px] text-gray-400">10ft Drop Tested</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hidden sm:block absolute bottom-16 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-2.5 py-1.5 z-20 hero-float-badge" style={{ animationDelay: "1.2s" }}>
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <div>
+                      <p className="text-[10px] font-bold text-accent">MagSafe Ready</p>
+                      <p className="text-[8px] text-gray-400">N52 Magnets</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Case selector dots */}
+                <div className="absolute -bottom-7 sm:-bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
+                  {heroProducts.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveCase(index)}
+                      className={`rounded-full transition-all duration-300 ${
+                        index === activeCase
+                          ? "w-5 h-1.5 bg-accent"
+                          : "w-1.5 h-1.5 bg-gray-300 hover:bg-accent/50"
+                      }`}
+                      aria-label={`View case ${index + 1}`}
                     />
-                  </div>
-                ))}
-              </div>
-
-              {/* Case name label */}
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-100 rounded-full px-3 py-1 shadow-sm z-20">
-                <p className="text-[9px] sm:text-xs font-semibold text-gray-900 whitespace-nowrap">
-                  {heroProducts[activeCase]?.name}
-                </p>
-              </div>
-
-              {/* Floating badges */}
-              <div className="hidden sm:block absolute top-2 -left-4 bg-white rounded-xl shadow-lg border border-gray-100 px-2.5 py-1.5 z-20 hero-float-badge">
-                <div className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-900">MIL-STD 810G</p>
-                    <p className="text-[8px] text-gray-400">10ft Drop Tested</p>
-                  </div>
+                  ))}
                 </div>
-              </div>
-
-              <div className="hidden sm:block absolute bottom-16 -right-4 bg-white rounded-xl shadow-lg border border-gray-100 px-2.5 py-1.5 z-20 hero-float-badge" style={{ animationDelay: "1.2s" }}>
-                <div className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <div>
-                    <p className="text-[10px] font-bold text-accent">MagSafe Ready</p>
-                    <p className="text-[8px] text-gray-400">N52 Magnets</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Case selector dots */}
-              <div className="absolute -bottom-7 sm:-bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
-                {heroProducts.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveCase(index)}
-                    className={`rounded-full transition-all duration-300 ${
-                      index === activeCase
-                        ? "w-5 h-1.5 bg-accent"
-                        : "w-1.5 h-1.5 bg-gray-300 hover:bg-accent/50"
-                    }`}
-                    aria-label={`View case ${index + 1}`}
-                  />
-                ))}
               </div>
             </div>
           </div>
