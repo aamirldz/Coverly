@@ -11,6 +11,8 @@ import ProductJsonLd from "@/components/seo/ProductJsonLd";
 import { useCartStore } from "@/hooks/useCart";
 import Link from "next/link";
 
+export const runtime = 'edge';
+
 // ═══════════════════════════════════════════
 // PRODUCT DETAIL PAGE — /products/[slug]
 // Left: Image carousel (60%)
