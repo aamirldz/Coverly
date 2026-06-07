@@ -36,19 +36,22 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
     >
-      {/* ── BACKGROUND VIDEO ── */}
+      {/* ── BACKGROUND VIDEO (Desktop Only) ── */}
       <video
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover z-[0] brightness-75 contrast-75"
+        className="hidden md:block absolute inset-0 w-full h-full object-cover z-[0] brightness-75 contrast-75"
       >
         <source src="/hero-background.mp4" type="video/mp4" />
       </video>
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-black/40 z-[1]" />
+      {/* Dark overlay for desktop video */}
+      <div className="hidden md:block absolute inset-0 bg-black/40 z-[1]" />
+      
+      {/* Solid white background for mobile */}
+      <div className="md:hidden absolute inset-0 bg-white z-[0]" />
 
       {/* Decorative gradient blobs */}
       <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
@@ -106,7 +109,7 @@ export default function HeroSection() {
             {/* Brand Name */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
               <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[0.9]">
-                <span className="text-white">LUXE</span>
+                <span className="text-text-primary md:text-white">LUXE</span>
                 <span className="bg-gradient-to-r from-accent via-orange-500 to-amber-500 bg-clip-text text-transparent">WRAP</span>
               </h1>
               <div className="flex items-center gap-2 justify-center lg:justify-start mt-1">
@@ -117,15 +120,15 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline */}
-            <p className={`text-lg sm:text-xl md:text-2xl text-white/90 mt-3 sm:mt-5 font-medium leading-snug ${
+            <p className={`text-lg sm:text-xl md:text-2xl text-text-secondary md:text-white/90 mt-3 sm:mt-5 font-medium leading-snug ${
               mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
             }`}>
               Wrap Your World in{" "}
-              <span className="text-white font-bold">Style</span>
+              <span className="text-text-primary md:text-white font-bold">Style</span>
             </p>
 
             {/* Description — hidden on mobile to save space */}
-            <p className={`hidden sm:block text-sm sm:text-base text-white/70 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium ${
+            <p className={`hidden sm:block text-sm sm:text-base text-text-muted md:text-white/70 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium ${
               mounted ? "hero-text-animate hero-text-animate-delay-2" : "opacity-0"
             }`}>
               Premium MagSafe, Carbon Fiber & Aramid cases. Military-grade protection meets stunning design.
@@ -146,7 +149,7 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="#features"
-                className="border border-white/40 hover:border-accent text-white/80 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2 backdrop-blur-sm"
+                className="border border-gray-200 md:border-white/40 hover:border-accent text-text-secondary md:text-white/80 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2 backdrop-blur-sm"
               >
                 EXPLORE
               </Link>
@@ -157,15 +160,15 @@ export default function HeroSection() {
               mounted ? "hero-text-animate hero-text-animate-delay-3" : "opacity-0"
             }`}>
               {[
-                { value: "10K+", label: "Sold", color: "text-accent" },
-                { value: "4.9★", label: "Rating", color: "text-white" },
-                { value: "MIL-STD", label: "Certified", color: "text-white" },
+                { value: "10K+", label: "Sold", color: "text-accent md:text-accent" },
+                { value: "4.9★", label: "Rating", color: "text-text-primary md:text-white" },
+                { value: "MIL-STD", label: "Certified", color: "text-text-primary md:text-white" },
               ].map((stat, i) => (
                 <div key={i} className="flex items-center gap-2 sm:gap-3">
-                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-white/20" />}
+                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-gray-200 md:bg-white/20" />}
                   <div className={`${i > 0 ? "pl-2 sm:pl-3" : ""} text-center lg:text-left`}>
                     <p className={`text-lg sm:text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                    <p className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-widest">{stat.label}</p>
+                    <p className="text-[8px] sm:text-[10px] text-text-muted md:text-white/50 uppercase tracking-widest">{stat.label}</p>
                   </div>
                 </div>
               ))}
