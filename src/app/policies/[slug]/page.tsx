@@ -56,8 +56,9 @@ const policyData: Record<string, { title: string; content: React.ReactNode }> = 
   }
 };
 
-export default function PolicyPage({ params }: { params: { slug: string } }) {
-  const data = policyData[params.slug];
+export default async function PolicyPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const data = policyData[resolvedParams.slug];
 
   if (!data) {
     notFound();
