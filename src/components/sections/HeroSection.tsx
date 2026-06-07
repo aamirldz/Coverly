@@ -159,7 +159,7 @@ export default function HeroSection() {
             mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
           }`}>
             {/* Inner wrapper to apply vertical lift without being overridden by the entrance animation transform */}
-            <div className="-translate-y-8 lg:-translate-y-24">
+            <div className="-translate-y-[60px] lg:-translate-y-[120px]">
               <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
                 {/* Glow */}
                 <div className="absolute inset-[-15%] bg-gradient-to-b from-accent/6 via-accent/4 to-transparent rounded-full blur-2xl" />
