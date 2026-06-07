@@ -1,8 +1,8 @@
 "use client";
 
 // ═══════════════════════════════════════════
-// HERO SECTION — Premium Mobile-First Hero
-// Compact on mobile, expansive on desktop
+// HERO SECTION — Premium White Background
+// Clean, modern, mobile-first design
 // Auto-rotating product carousel
 // ═══════════════════════════════════════════
 
@@ -19,7 +19,6 @@ export default function HeroSection() {
 
   useEffect(() => { initProducts(); }, [initProducts]);
 
-  // Use admin-configured hero products (fallback handled inside getter)
   const heroProducts = getHeroProducts();
 
   useEffect(() => {
@@ -34,40 +33,23 @@ export default function HeroSection() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden"
+      className="relative min-h-[85vh] lg:min-h-[90vh] flex items-center overflow-hidden bg-white"
     >
-      {/* ── BACKGROUND VIDEO (Desktop Only) ── */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="hidden md:block absolute inset-0 w-full h-full object-cover z-[0] brightness-75 contrast-75"
-      >
-        <source src="/hero-background.mp4" type="video/mp4" />
-      </video>
-      {/* Dark overlay for desktop video */}
-      <div className="hidden md:block absolute inset-0 bg-black/40 z-[1]" />
-      
-      {/* Solid white background for mobile */}
-      <div className="md:hidden absolute inset-0 bg-white z-[0]" />
-
       {/* Decorative gradient blobs */}
-      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[2]" />
-      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px] z-[2]" />
+      <div className="absolute top-[-10%] left-[-5%] w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] bg-accent/6 rounded-full blur-[80px] sm:blur-[120px] z-[1]" />
+      <div className="absolute bottom-[-5%] right-[-5%] w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-orange-200/30 rounded-full blur-[80px] sm:blur-[100px] z-[1]" />
 
       {/* Subtle dot pattern */}
       <div
-        className="absolute inset-0 opacity-[0.025]"
+        className="absolute inset-0 opacity-[0.025] z-[1]"
         style={{
           backgroundImage: `radial-gradient(circle, #FA7000 1px, transparent 1px)`,
           backgroundSize: "32px 32px",
         }}
       />
 
-      {/* Floating particles — fewer, smaller */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
         {mounted &&
           Array.from({ length: 8 }).map((_, i) => (
             <div
@@ -90,14 +72,11 @@ export default function HeroSection() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 items-center">
 
-          {/* ═══ MOBILE: Text first, then product  ═══ */}
-          {/* ═══ DESKTOP: Text left, product right  ═══ */}
-
           {/* ── TEXT CONTENT ── */}
           <div className="text-center lg:text-left order-1 lg:order-1">
             {/* Badge */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
-              <span className="inline-flex items-center gap-2 bg-accent/20 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-accent/30 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-2 bg-accent/10 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-accent/20">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
@@ -109,7 +88,7 @@ export default function HeroSection() {
             {/* Brand Name */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
               <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[0.9]">
-                <span className="text-text-primary md:text-white">LUXE</span>
+                <span className="text-gray-900">LUXE</span>
                 <span className="bg-gradient-to-r from-accent via-orange-500 to-amber-500 bg-clip-text text-transparent">WRAP</span>
               </h1>
               <div className="flex items-center gap-2 justify-center lg:justify-start mt-1">
@@ -120,15 +99,15 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline */}
-            <p className={`text-lg sm:text-xl md:text-2xl text-text-secondary md:text-white/90 mt-3 sm:mt-5 font-medium leading-snug ${
+            <p className={`text-lg sm:text-xl md:text-2xl text-gray-600 mt-3 sm:mt-5 font-medium leading-snug ${
               mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
             }`}>
               Wrap Your World in{" "}
-              <span className="text-text-primary md:text-white font-bold">Style</span>
+              <span className="text-gray-900 font-bold">Style</span>
             </p>
 
-            {/* Description — hidden on mobile to save space */}
-            <p className={`hidden sm:block text-sm sm:text-base text-text-muted md:text-white/70 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium ${
+            {/* Description */}
+            <p className={`hidden sm:block text-sm sm:text-base text-gray-500 mt-2 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium ${
               mounted ? "hero-text-animate hero-text-animate-delay-2" : "opacity-0"
             }`}>
               Premium MagSafe, Carbon Fiber & Aramid cases. Military-grade protection meets stunning design.
@@ -149,26 +128,26 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="#features"
-                className="border border-gray-200 md:border-white/40 hover:border-accent text-text-secondary md:text-white/80 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2 backdrop-blur-sm"
+                className="border border-gray-200 hover:border-accent text-gray-600 hover:text-accent px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl font-medium text-xs sm:text-sm tracking-wide transition-all flex items-center gap-2"
               >
                 EXPLORE
               </Link>
             </div>
 
-            {/* Stats — compact on mobile */}
+            {/* Stats */}
             <div className={`flex justify-center lg:justify-start gap-4 sm:gap-8 mt-5 sm:mt-8 ${
               mounted ? "hero-text-animate hero-text-animate-delay-3" : "opacity-0"
             }`}>
               {[
-                { value: "10K+", label: "Sold", color: "text-accent md:text-accent" },
-                { value: "4.9★", label: "Rating", color: "text-text-primary md:text-white" },
-                { value: "MIL-STD", label: "Certified", color: "text-text-primary md:text-white" },
+                { value: "10K+", label: "Sold", color: "text-accent" },
+                { value: "4.9★", label: "Rating", color: "text-gray-900" },
+                { value: "MIL-STD", label: "Certified", color: "text-gray-900" },
               ].map((stat, i) => (
                 <div key={i} className="flex items-center gap-2 sm:gap-3">
-                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-gray-200 md:bg-white/20" />}
+                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-gray-200" />}
                   <div className={`${i > 0 ? "pl-2 sm:pl-3" : ""} text-center lg:text-left`}>
                     <p className={`text-lg sm:text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                    <p className="text-[8px] sm:text-[10px] text-text-muted md:text-white/50 uppercase tracking-widest">{stat.label}</p>
+                    <p className="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest">{stat.label}</p>
                   </div>
                 </div>
               ))}
@@ -184,7 +163,7 @@ export default function HeroSection() {
               <div className="absolute inset-[-15%] bg-gradient-to-b from-accent/6 via-accent/4 to-transparent rounded-full blur-2xl" />
 
               {/* Product images — crossfade, clipped to circle */}
-              <div className="relative w-full h-full rounded-full overflow-hidden">
+              <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl ring-1 ring-gray-100">
                 {heroProducts.map((product, index) => (
                   <div
                     key={product.id}
@@ -205,20 +184,20 @@ export default function HeroSection() {
 
               {/* Case name label */}
               <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-100 rounded-full px-3 py-1 shadow-sm z-20">
-                <p className="text-[9px] sm:text-xs font-semibold text-text-primary whitespace-nowrap">
+                <p className="text-[9px] sm:text-xs font-semibold text-gray-900 whitespace-nowrap">
                   {heroProducts[activeCase]?.name}
                 </p>
               </div>
 
-              {/* Floating badges — hidden on very small screens, visible from sm+ */}
+              {/* Floating badges */}
               <div className="hidden sm:block absolute top-2 -left-4 bg-white rounded-xl shadow-lg border border-gray-100 px-2.5 py-1.5 z-20 hero-float-badge">
                 <div className="flex items-center gap-1.5">
                   <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                   <div>
-                    <p className="text-[10px] font-bold text-text-primary">MIL-STD 810G</p>
-                    <p className="text-[8px] text-text-muted">10ft Drop Tested</p>
+                    <p className="text-[10px] font-bold text-gray-900">MIL-STD 810G</p>
+                    <p className="text-[8px] text-gray-400">10ft Drop Tested</p>
                   </div>
                 </div>
               </div>
@@ -230,7 +209,7 @@ export default function HeroSection() {
                   </svg>
                   <div>
                     <p className="text-[10px] font-bold text-accent">MagSafe Ready</p>
-                    <p className="text-[8px] text-text-muted">N52 Magnets</p>
+                    <p className="text-[8px] text-gray-400">N52 Magnets</p>
                   </div>
                 </div>
               </div>
@@ -255,11 +234,11 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll Indicator — hidden on mobile */}
+      {/* Scroll Indicator */}
       <div className={`hidden sm:flex absolute bottom-5 left-1/2 -translate-x-1/2 flex-col items-center gap-1 ${
         mounted ? "hero-text-animate hero-text-animate-delay-3" : "opacity-0"
       }`}>
-        <p className="text-[8px] text-text-muted uppercase tracking-[0.15em] font-medium">Scroll</p>
+        <p className="text-[8px] text-gray-400 uppercase tracking-[0.15em] font-medium">Scroll</p>
         <div className="w-4 h-7 border border-gray-300 rounded-full flex items-start justify-center p-0.5">
           <div className="w-1 h-1.5 bg-accent rounded-full animate-bounce" />
         </div>
