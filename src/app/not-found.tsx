@@ -1,3 +1,4 @@
+import Button from "@/components/ui/Button";
 import Link from "next/link";
 
 // ═══════════════════════════════════════════
@@ -7,20 +8,8 @@ import Link from "next/link";
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Mini Navbar */}
-      <nav className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-heading font-bold text-text-primary">LUXEWRAP</span>
-            <span className="text-[10px] text-accent font-semibold tracking-widest">INDIA</span>
-          </Link>
-        </div>
-      </nav>
-
-      {/* 404 Content */}
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
+    <div className="flex-1 flex items-center justify-center px-4 py-20">
+      <div className="text-center max-w-md">
           {/* Animated 404 */}
           <div className="relative mb-8">
             <span className="text-[160px] font-heading font-bold text-gray-100 leading-none block select-none">
@@ -44,18 +33,12 @@ export default function NotFoundPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/"
-              className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-3.5 rounded-xl transition-all text-sm hover:shadow-glow"
-            >
+            <Button href="/">
               ← BACK TO HOME
-            </Link>
-            <Link
-              href="/#products"
-              className="border-2 border-gray-200 hover:border-accent text-text-secondary hover:text-accent font-bold px-8 py-3.5 rounded-xl transition-all text-sm"
-            >
+            </Button>
+            <Button href="/#products" variant="outline">
               SHOP PRODUCTS
-            </Link>
+            </Button>
           </div>
 
           {/* Helpful Links */}
@@ -71,6 +54,5 @@ export default function NotFoundPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

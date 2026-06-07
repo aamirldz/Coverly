@@ -2,10 +2,9 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useCartStore, getCartTotalPrice, getCartItemCount, getCartSavings } from "@/hooks/useCart";
-import { formatPrice, INDIAN_STATES } from "@/lib/utils";
-import AnnouncementBar from "@/components/ui/AnnouncementBar";
-import Footer from "@/components/ui/Footer";
-import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
+import FloatingInput from "@/components/ui/FloatingInput";
+import Button from "@/components/ui/Button";
 import Image from "next/image";
 
 // ═══════════════════════════════════════════
@@ -128,70 +127,25 @@ export default function CheckoutPage() {
     window.location.href = "/order-confirmation";
   };
 
-  // Floating Input Component
-  const FloatingInput = ({ label, name, type = "text", maxLength, inputMode, isSelect = false }: any) => {
-    const hasError = errors[name] && touched[name];
-    const isValid = !errors[name] && touched[name] && formData[name as keyof CheckoutFormData].length > 0;
-    
-    return (
-      <div className="relative group">
-        {isSelect ? (
-          <select
-            name={name} value={formData[name as keyof CheckoutFormData]}
-            onChange={handleChange} onBlur={handleBlur}
-            className={`block px-4 pb-2.5 pt-6 w-full text-sm text-text-primary bg-white rounded-xl border appearance-none focus:outline-none focus:ring-0 peer transition-colors ${
-              hasError ? "border-red-500 focus:border-red-500" : isValid ? "border-green-500 focus:border-green-500" : "border-gray-200 focus:border-accent"
-            }`}
-          >
-            <option value="">Select...</option>
-            {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-        ) : (
-          <input
-            type={type} name={name} value={formData[name as keyof CheckoutFormData]}
-            onChange={handleChange} onBlur={handleBlur} maxLength={maxLength} inputMode={inputMode}
-            className={`block px-4 pb-2.5 pt-6 w-full text-sm text-text-primary bg-white rounded-xl border appearance-none focus:outline-none focus:ring-0 peer transition-colors ${
-              hasError ? "border-red-500 focus:border-red-500" : isValid ? "border-green-500 focus:border-green-500" : "border-gray-200 focus:border-accent"
-            }`}
-            placeholder=" "
-          />
-        )}
-        <label className={`absolute text-sm duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 ${
-          hasError ? "text-red-500" : isValid ? "text-green-600" : "text-text-muted peer-focus:text-accent"
-        }`}>
-          {label}
-        </label>
-        
-        {/* Status Icons */}
-        <div className="absolute top-4 right-4 pointer-events-none">
-          {hasError && <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
-          {isValid && <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>}
-        </div>
-        
-        {hasError && <p className="mt-1 text-xs text-red-500 font-medium px-1">{errors[name]}</p>}
-      </div>
-    );
-  };
+
 
   if (!mounted) return null;
-  if (items.length === 0) return <div className="min-h-screen pt-[100px] text-center text-xl">Cart is empty. Returning...</div>;
+  if (items.length === 0) return (
+    <div className="py-32 text-center bg-gray-50/50 min-h-screen">
+      <div className="w-20 h-20 bg-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-5">
+        <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+      </div>
+      <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">Your Cart is Empty</h2>
+      <p className="text-text-secondary mb-8">Add some premium cases to your cart before checking out.</p>
+      <Button href="/">Continue Shopping</Button>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
-      <div className="fixed top-0 left-0 right-0 z-50"><AnnouncementBar /></div>
-      <div className="fixed top-[32px] left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-heading font-black tracking-tight text-text-primary">LUXEWRAP</span>
-          </Link>
-          <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-            <span className="text-[11px] font-bold tracking-wide uppercase">Secure SSL Checkout</span>
-          </div>
-        </div>
-      </div>
-
-      <main className="pt-[110px] pb-20">
+    <div className="bg-gray-50/50">
+      <div className="pb-20 pt-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
           {/* Visual Progress Tracker */}
@@ -219,14 +173,14 @@ export default function CheckoutPage() {
                 <h2 className="text-xl font-heading font-bold text-text-primary mb-5">Shipping Information</h2>
                 <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
-                    <div className="sm:col-span-2"><FloatingInput name="email" label="Email Address *" type="email" /></div>
-                    <FloatingInput name="name" label="Full Name *" />
-                    <FloatingInput name="phone" label="Phone Number (+91) *" type="tel" maxLength={10} inputMode="numeric" />
-                    <div className="sm:col-span-2"><FloatingInput name="address1" label="Street Address / Flat No. *" /></div>
-                    <div className="sm:col-span-2"><FloatingInput name="address2" label="Landmark (Optional)" /></div>
-                    <FloatingInput name="city" label="City *" />
-                    <FloatingInput name="state" label="State *" isSelect={true} />
-                    <FloatingInput name="pincode" label="Pincode *" type="tel" maxLength={6} inputMode="numeric" />
+                    <div className="sm:col-span-2"><FloatingInput name="email" label="Email Address *" type="email" value={formData.email} onChange={handleChange} onBlur={handleBlur} error={errors.email} touched={touched.email} /></div>
+                    <FloatingInput name="name" label="Full Name *" value={formData.name} onChange={handleChange} onBlur={handleBlur} error={errors.name} touched={touched.name} />
+                    <FloatingInput name="phone" label="Phone Number (+91) *" type="tel" maxLength={10} inputMode="numeric" value={formData.phone} onChange={handleChange} onBlur={handleBlur} error={errors.phone} touched={touched.phone} />
+                    <div className="sm:col-span-2"><FloatingInput name="address1" label="Street Address / Flat No. *" value={formData.address1} onChange={handleChange} onBlur={handleBlur} error={errors.address1} touched={touched.address1} /></div>
+                    <div className="sm:col-span-2"><FloatingInput name="address2" label="Landmark (Optional)" value={formData.address2} onChange={handleChange} onBlur={handleBlur} error={errors.address2} touched={touched.address2} /></div>
+                    <FloatingInput name="city" label="City *" value={formData.city} onChange={handleChange} onBlur={handleBlur} error={errors.city} touched={touched.city} />
+                    <FloatingInput name="state" label="State *" isSelect={true} value={formData.state} onChange={handleChange} onBlur={handleBlur} error={errors.state} touched={touched.state} />
+                    <FloatingInput name="pincode" label="Pincode *" type="tel" maxLength={6} inputMode="numeric" value={formData.pincode} onChange={handleChange} onBlur={handleBlur} error={errors.pincode} touched={touched.pincode} />
                   </div>
                 </div>
               </div>
@@ -361,8 +315,7 @@ export default function CheckoutPage() {
 
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
 
       {/* ── SIMULATED PAYMENT MODAL ── */}
       {showPaymentModal && (

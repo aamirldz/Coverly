@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import AnnouncementBar from "@/components/ui/AnnouncementBar";
-import Footer from "@/components/ui/Footer";
 import { formatPrice } from "@/lib/utils";
 import confetti from "canvas-confetti";
+import Button from "@/components/ui/Button";
+import Timeline from "@/components/ui/Timeline";
 
 // ═══════════════════════════════════════════
 // ORDER CONFIRMATION PAGE — Success state
@@ -78,9 +78,8 @@ export default function OrderConfirmationPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="fixed top-0 left-0 right-0 z-50"><AnnouncementBar /></div>
-        <div className="flex items-center justify-center min-h-screen pt-[88px]">
+      <div className="bg-white">
+        <div className="flex items-center justify-center py-20">
           <div className="text-center px-4">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
               <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,20 +100,8 @@ export default function OrderConfirmationPage() {
     : "";
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="fixed top-0 left-0 right-0 z-50"><AnnouncementBar /></div>
-      <div className="fixed top-[32px] left-0 right-0 z-40">
-        <nav className="bg-white/95 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-heading font-bold text-text-primary">LUXEWRAP</span>
-              <span className="text-[10px] text-accent font-semibold tracking-widest">INDIA</span>
-            </Link>
-          </div>
-        </nav>
-      </div>
-
-      <main className="pt-[100px] pb-20">
+    <div className="bg-white">
+      <div className="pb-20 pt-8">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           {/* Success Hero */}
           <div className="text-center mb-8">
@@ -234,65 +221,25 @@ export default function OrderConfirmationPage() {
           <div className="mt-8">
             <h3 className="text-sm font-bold text-text-primary mb-4 px-2">Order Status</h3>
             <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-              <div className="relative">
-                {/* Timeline Line */}
-                <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-100" />
-                
-                {/* Steps */}
-                <div className="space-y-6 relative">
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 z-10 shadow-sm shadow-green-500/20">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                    </div>
-                    <div className="pt-1">
-                      <p className="text-sm font-bold text-text-primary">Order Confirmed</p>
-                      <p className="text-[11px] text-text-muted mt-0.5">We've received your order and are preparing it.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 z-10 shadow-sm shadow-accent/20 animate-pulse">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                    </div>
-                    <div className="pt-1 opacity-80">
-                      <p className="text-sm font-bold text-text-primary">Processing</p>
-                      <p className="text-[11px] text-text-muted mt-0.5">Quality check and packaging in progress.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center flex-shrink-0 z-10">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                    </div>
-                    <div className="pt-1 opacity-50">
-                      <p className="text-sm font-bold text-text-primary">Shipped</p>
-                      <p className="text-[11px] text-text-muted mt-0.5">Estimated delivery: 3-5 business days.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Timeline steps={[
+                { label: "Order Confirmed", description: "We've received your order and are preparing it.", done: true },
+                { label: "Processing", description: "Quality check and packaging in progress.", done: false, isCurrent: true },
+                { label: "Shipped", description: "Estimated delivery: 3-5 business days.", done: false }
+              ]} />
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
-            <Link
-              href="/track-order"
-              className="flex-1 text-center bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl transition-all text-sm"
-            >
+            <Button href="/track-order" className="flex-1">
               TRACK YOUR ORDER
-            </Link>
-            <Link
-              href="/"
-              className="flex-1 text-center border-2 border-gray-200 hover:border-accent text-text-secondary hover:text-accent font-bold py-3.5 rounded-xl transition-all text-sm"
-            >
+            </Button>
+            <Button href="/" variant="secondary" className="flex-1">
               CONTINUE SHOPPING
-            </Link>
+            </Button>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }

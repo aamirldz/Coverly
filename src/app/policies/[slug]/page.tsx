@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
 
 // ═══════════════════════════════════════════
 // POLICIES PAGE — Dynamic route for legal pages
@@ -66,8 +64,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
 
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen pt-24 pb-16 bg-white">
+      <div className="pb-16 bg-white pt-8">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">{data.title}</h1>
@@ -77,8 +74,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
             {data.content}
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </>
   );
 }

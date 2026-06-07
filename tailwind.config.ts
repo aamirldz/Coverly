@@ -10,14 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         accent: {
-          DEFAULT: "#FA7000",
+          DEFAULT: "var(--color-accent, #FA7000)",
           light: "#FF8C33",
           dark: "#D45F00",
           glow: "rgba(250, 112, 0, 0.15)",
         },
-        dark: {
+        surface: {
           DEFAULT: "#FFFFFF",
-          card: "#F5F5F5",
+          secondary: "#F5F5F5",
           border: "#E5E5E5",
           hover: "#EEEEEE",
         },
@@ -29,12 +29,7 @@ const config: Config = {
         success: "#22C55E",
         warning: "#F59E0B",
         error: "#EF4444",
-        badge: {
-          new: "#FA7000",
-          bestseller: "#D4A017",
-          forher: "#EC4899",
-          lowstock: "#EF4444",
-        },
+
       },
       fontFamily: {
         heading: ["var(--font-heading)", "Playfair Display", "serif"],
@@ -82,10 +77,14 @@ const config: Config = {
       },
       borderRadius: {
         "card": "16px",
+        "button": "12px",
+        "badge": "9999px",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 
 export default config;

@@ -9,6 +9,12 @@
    Loaded via next/font for optimal performance
    ═══════════════════════════════════════════ */
 
+@layer base {
+  :root {
+    --color-accent: #FA7000;
+  }
+}
+
 /* === SCROLLBAR: Hidden for immersive feel === */
 ::-webkit-scrollbar {
   display: none;
@@ -41,7 +47,7 @@ body {
 /* === ACCESSIBILITY: Focus Styles === */
 /* Visible focus ring for keyboard navigation only */
 *:focus-visible {
-  outline: 2px solid #FA7000;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -56,7 +62,7 @@ body {
   position: absolute;
   top: -40px;
   left: 0;
-  background: #FA7000;
+  background: var(--color-accent);
   color: white;
   padding: 8px 16px;
   z-index: 10000;
@@ -81,17 +87,10 @@ body {
 
 /* === SMOOTH TRANSITIONS ON ALL INTERACTIVE ELEMENTS === */
 a, button, input, select, textarea {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* === SCROLLBAR HIDE (for horizontal scroll areas) === */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
 
 /* === SLOW SPIN (hero ring decoration) === */
 @keyframes spin-slow {
@@ -106,7 +105,6 @@ a, button, input, select, textarea {
 .product-card {
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out, box-shadow 0.2s ease;
-  will-change: transform;
 }
 
 .product-card:hover {
@@ -167,7 +165,7 @@ a, button, input, select, textarea {
 
 /* === ORANGE GRADIENT TEXT === */
 .text-gradient-orange {
-  background: linear-gradient(135deg, #FA7000, #FF8C33);
+  background: linear-gradient(135deg, var(--color-accent), #FF8C33);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -175,20 +173,23 @@ a, button, input, select, textarea {
 
 /* === BADGE STYLES === */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 10px;
-  border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-badge text-[0.65rem] font-bold uppercase tracking-widest;
 }
 
-.badge-new { background: #FA7000; color: white; }
-.badge-bestseller { background: #D4A017; color: white; }
-.badge-forher { background: #EC4899; color: white; }
-.badge-lowstock { background: #EF4444; color: white; }
+.badge-new { @apply bg-accent text-white; }
+.badge-bestseller { @apply bg-yellow-500 text-white; }
+.badge-forher { @apply bg-pink-500 text-white; }
+.badge-lowstock { @apply bg-red-500 text-white; }
+
+/* === BUTTON UTILITIES === */
+@layer components {
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-dark text-white px-8 py-3 rounded-button font-bold text-sm hover:shadow-glow;
+  }
+  .btn-secondary {
+    @apply border-2 border-gray-200 hover:border-accent text-text-secondary hover:text-accent font-bold px-8 py-3 rounded-button text-sm;
+  }
+}
 
 /* === ANNOUNCEMENT BAR ANIMATION === */
 @keyframes slide-announcement {
@@ -242,7 +243,7 @@ a, button, input, select, textarea {
 }
 
 /* === STAR RATING === */
-.star-filled { color: #FA7000; }
+.star-filled { color: var(--color-accent); }
 .star-empty { color: #D1D5DB; }
 
 /* === RESPONSIVE HELPERS === */

@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import Navbar from "@/components/ui/Navbar";
+import AnnouncementBar from "@/components/ui/AnnouncementBar";
+import Footer from "@/components/ui/Footer";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import CartSidebar from "@/components/cart/CartSidebar";
 
 // ═══════════════════════════════════════════
 // ROOT LAYOUT — Global SEO, Fonts, Theme
@@ -161,7 +166,20 @@ export default function RootLayout({
       <body className="bg-white text-text-primary font-body antialiased">
         <a href="#main-content" className="skip-to-content">Skip to main content</a>
         <Providers>
-          {children}
+          <CartSidebar />
+          <WhatsAppButton />
+          
+          <div className="fixed top-0 left-0 right-0 z-50">
+            <AnnouncementBar />
+          </div>
+          <div className="fixed top-[32px] left-0 right-0 z-40">
+            <Navbar />
+          </div>
+
+          <main id="main-content" className="pt-[88px] min-h-[calc(100vh-300px)]">
+            {children}
+          </main>
+          <Footer />
         </Providers>
       </body>
     </html>

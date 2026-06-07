@@ -30,7 +30,7 @@ export default function AnnouncementBar() {
   }, []);
 
   return (
-    <div className="w-full bg-dark-card border-b border-dark-border py-2 relative z-50">
+    <div className="w-full bg-surface-secondary border-b border-surface-border py-2 relative z-50">
       <div className="flex items-center justify-center">
         {/* Left arrow */}
         <button
