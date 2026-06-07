@@ -134,7 +134,24 @@ export default function HeroSection() {
               </Link>
             </div>
 
-            {/* Stats removed from here, moved to bottom border */}
+            {/* Stats */}
+            <div className={`flex justify-center lg:justify-start gap-4 sm:gap-8 mt-5 sm:mt-8 ${
+              mounted ? "hero-text-animate hero-text-animate-delay-3" : "opacity-0"
+            }`}>
+              {[
+                { value: "10K+", label: "Sold", color: "text-accent" },
+                { value: "4.9★", label: "Rating", color: "text-gray-900" },
+                { value: "MIL-STD", label: "Certified", color: "text-gray-900" },
+              ].map((stat, i) => (
+                <div key={i} className="flex items-center gap-2 sm:gap-3">
+                  {i > 0 && <div className="w-px h-6 sm:h-8 bg-gray-200" />}
+                  <div className={`${i > 0 ? "pl-2 sm:pl-3" : ""} text-center lg:text-left`}>
+                    <p className={`text-lg sm:text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                    <p className="text-[8px] sm:text-[10px] text-gray-400 uppercase tracking-widest">{stat.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* ── PRODUCT SHOWCASE ── */}
@@ -232,17 +249,18 @@ export default function HeroSection() {
       <div className={`absolute bottom-0 left-0 right-0 border-t border-gray-100 bg-white/90 backdrop-blur-md z-30 ${
         mounted ? "animate-slide-up" : "opacity-0"
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between sm:justify-around items-center overflow-x-auto scrollbar-hide gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between sm:justify-around items-center overflow-x-auto scrollbar-hide gap-8 sm:gap-6">
           {[
-            { value: "10K+", label: "Cases Sold", color: "text-accent" },
-            { value: "4.9/5", label: "Customer Rating", color: "text-gray-900" },
-            { value: "MIL-STD", label: "Drop Certified", color: "text-gray-900" },
-            { value: "FREE", label: "Shipping in India", color: "text-green-600" },
-          ].map((stat, i) => (
-            <div key={i} className="flex items-center gap-2 sm:gap-3 shrink-0">
+            { title: "Military-Grade", desc: "MIL-STD 810G · 10ft drop proof" },
+            { title: "Anti-Yellow", desc: "Lifetime clarity guarantee" },
+            { title: "MagSafe Ready", desc: "N52 magnets · Fast charge" },
+            { title: "Premium Materials", desc: "Carbon fiber · Aramid · 0.6mm thin" },
+          ].map((feat, i) => (
+            <div key={i} className="flex items-center gap-6 sm:gap-8 shrink-0">
+              {i > 0 && <div className="hidden sm:block w-px h-8 bg-gray-200" />}
               <div className="text-center sm:text-left">
-                <p className={`text-base sm:text-xl font-black ${stat.color}`}>{stat.value}</p>
-                <p className="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">{stat.label}</p>
+                <p className="text-[13px] sm:text-sm font-black text-gray-900 uppercase tracking-wide">{feat.title}</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium mt-0.5">{feat.desc}</p>
               </div>
             </div>
           ))}
