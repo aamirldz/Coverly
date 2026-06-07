@@ -245,22 +245,59 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ── BOTTOM TRUST BORDER ── */}
-      <div className={`absolute bottom-0 left-0 right-0 border-t border-gray-100 bg-white/90 backdrop-blur-md z-30 ${
+      {/* ── BOTTOM TRUST BORDER (MATCHING MOCKUP) ── */}
+      <div className={`absolute bottom-0 left-0 right-0 border-y border-gray-200 bg-gray-50 z-30 ${
         mounted ? "animate-slide-up" : "opacity-0"
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between sm:justify-around items-center overflow-x-auto scrollbar-hide gap-8 sm:gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between sm:justify-center items-center overflow-x-auto scrollbar-hide sm:gap-16 lg:gap-24">
           {[
-            { title: "Military-Grade", desc: "MIL-STD 810G · 10ft drop proof" },
-            { title: "Anti-Yellow", desc: "Lifetime clarity guarantee" },
-            { title: "MagSafe Ready", desc: "N52 magnets · Fast charge" },
-            { title: "Premium Materials", desc: "Carbon fiber · Aramid · 0.6mm thin" },
+            {
+              title: "Military-Grade",
+              desc: "MIL-STD 810G · 10ft drop proof",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 sm:w-7 sm:h-7 text-accent shrink-0">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="M9 12l2 2 4-4" />
+                </svg>
+              )
+            },
+            {
+              title: "Anti-Yellow",
+              desc: "Lifetime clarity guarantee",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 sm:w-7 sm:h-7 text-accent shrink-0">
+                  <path d="M10 2v7.31L5.6 15.58A2.5 2.5 0 0 0 7.58 19h8.84a2.5 2.5 0 0 0 1.98-3.42L14 9.31V2" />
+                  <path d="M8.5 2h7" />
+                  <path d="M7 15h10" />
+                </svg>
+              )
+            },
+            {
+              title: "MagSafe Ready",
+              desc: "N52 magnets · Fast charge",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 sm:w-7 sm:h-7 text-accent shrink-0">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              )
+            },
+            {
+              title: "Premium Materials",
+              desc: "Carbon fiber · Aramid · 0.6mm thin",
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 sm:w-7 sm:h-7 text-accent shrink-0">
+                  <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  <path d="M20 3v4" />
+                  <path d="M22 5h-4" />
+                </svg>
+              )
+            },
           ].map((feat, i) => (
-            <div key={i} className="flex items-center gap-6 sm:gap-8 shrink-0">
-              {i > 0 && <div className="hidden sm:block w-px h-8 bg-gray-200" />}
-              <div className="text-center sm:text-left">
-                <p className="text-[13px] sm:text-sm font-black text-gray-900 uppercase tracking-wide">{feat.title}</p>
-                <p className="text-[10px] sm:text-[11px] text-gray-500 font-medium mt-0.5">{feat.desc}</p>
+            <div key={i} className="flex items-center gap-3 sm:gap-4 shrink-0 px-2 sm:px-0">
+              {feat.icon}
+              <div className="text-left">
+                <p className="text-[13px] sm:text-[14px] font-bold text-gray-900 tracking-tight">{feat.title}</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-400 font-medium mt-0.5 whitespace-nowrap">{feat.desc}</p>
               </div>
             </div>
           ))}
