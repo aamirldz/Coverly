@@ -1,605 +1,415 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { useCartStore, getCartTotalPrice, getCartTotalMRP, getCartSavings, getCartItemCount } from "@/hooks/useCart";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useCartStore, getCartTotalPrice, getCartItemCount, getCartSavings } from "@/hooks/useCart";
 import { formatPrice, INDIAN_STATES } from "@/lib/utils";
 import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import Footer from "@/components/ui/Footer";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import CartSidebar from "@/components/cart/CartSidebar";
 import Link from "next/link";
+import Image from "next/image";
 
 // ═══════════════════════════════════════════
-// CHECKOUT PAGE — Secure & Professional
-// Step 1: Customer details (validated form)
-// Step 2: Payment method (Online/COD)
-// Step 3: Order summary with full breakdown
+// CHECKOUT PAGE — Advanced Premium Redesign
+// - Floating label inputs with validation checks
+// - Step-by-step visual tracker
+// - Simulated Secure Payment Modal
 // ═══════════════════════════════════════════
 
 interface CheckoutFormData {
-  name: string;
-  email: string;
-  phone: string;
-  address1: string;
-  address2: string;
-  city: string;
-  state: string;
-  pincode: string;
+  name: string; email: string; phone: string; address1: string; address2: string; city: string; state: string; pincode: string;
 }
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address1?: string;
-  city?: string;
-  state?: string;
-  pincode?: string;
-}
+interface FormErrors { [key: string]: string | undefined }
 
 export default function CheckoutPage() {
   const { items, clearCart } = useCartStore();
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<"initializing" | "processing" | "success">("initializing");
+  
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [formData, setFormData] = useState<CheckoutFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    pincode: "",
+    name: "", email: "", phone: "", address1: "", address2: "", city: "", state: "", pincode: "",
   });
 
-  // Compute totals from items array (safe from Zustand persist issues)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const subtotal = useMemo(() => getCartTotalPrice(items), [items]);
-  const totalMRP = useMemo(() => getCartTotalMRP(items), [items]);
   const savings = useMemo(() => getCartSavings(items), [items]);
   const totalQty = useMemo(() => getCartItemCount(items), [items]);
   const shippingCost = paymentMethod === "cod" ? 50 : 0;
   const prepaidDiscount = paymentMethod === "online" ? 50 : 0;
   const grandTotal = subtotal - prepaidDiscount + shippingCost;
-  const totalSavings = savings + prepaidDiscount + (paymentMethod === "online" ? shippingCost : 0);
+  const totalSavings = savings + prepaidDiscount + (paymentMethod === "online" ? 50 : 0); // shipping is basically saved
 
   // ── Validation ──
   const validateField = useCallback((name: string, value: string): string | undefined => {
     switch (name) {
-      case "name":
-        if (value.trim().length < 2) return "Full name is required";
-        if (!/^[a-zA-Z\s.'-]+$/.test(value.trim())) return "Please enter a valid name";
-        return undefined;
-      case "email":
-        if (!value) return "Email is required";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Please enter a valid email";
-        return undefined;
-      case "phone":
-        if (!value) return "Phone number is required";
-        if (!/^[6-9]\d{9}$/.test(value)) return "Enter a valid 10-digit Indian phone number";
-        return undefined;
-      case "address1":
-        if (value.trim().length < 5) return "Full address is required";
-        return undefined;
-      case "city":
-        if (value.trim().length < 2) return "City is required";
-        return undefined;
-      case "state":
-        if (!value) return "Please select your state";
-        return undefined;
-      case "pincode":
-        if (!/^\d{6}$/.test(value)) return "Enter a valid 6-digit pincode";
-        return undefined;
-      default:
-        return undefined;
+      case "name": return value.trim().length < 2 ? "Full name is required" : undefined;
+      case "email": return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? "Enter a valid email" : undefined;
+      case "phone": return !/^[6-9]\d{9}$/.test(value) ? "Enter 10-digit Indian number" : undefined;
+      case "address1": return value.trim().length < 5 ? "Full address is required" : undefined;
+      case "city": return value.trim().length < 2 ? "City is required" : undefined;
+      case "state": return !value ? "Select state" : undefined;
+      case "pincode": return !/^\d{6}$/.test(value) ? "Enter 6-digit pincode" : undefined;
+      default: return undefined;
     }
   }, []);
 
   const isFormValid = useMemo(() => {
-    const requiredFields: (keyof FormErrors)[] = ["name", "email", "phone", "address1", "city", "state", "pincode"];
-    return requiredFields.every((f) => !validateField(f, formData[f]));
+    const requiredFields = ["name", "email", "phone", "address1", "city", "state", "pincode"];
+    return requiredFields.every((f) => !validateField(f, formData[f as keyof CheckoutFormData]));
   }, [formData, validateField]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
-    // Input masking
     let maskedValue = value;
     if (name === "phone") maskedValue = value.replace(/\D/g, "").slice(0, 10);
     if (name === "pincode") maskedValue = value.replace(/\D/g, "").slice(0, 6);
 
     setFormData({ ...formData, [name]: maskedValue });
-
-    // Validate on change if field was already touched
     if (touched[name]) {
-      const error = validateField(name, maskedValue);
-      setErrors((prev) => ({ ...prev, [name]: error }));
+      setErrors((prev) => ({ ...prev, [name]: validateField(name, maskedValue) }));
     }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
-    const error = validateField(name, value);
-    setErrors((prev) => ({ ...prev, [name]: error }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
-  const handlePlaceOrder = async () => {
-    // Validate all fields
+  // Simulated Payment Flow
+  const triggerPaymentSim = async () => {
+    setShowPaymentModal(true);
+    setPaymentStatus("initializing");
+    await new Promise(r => setTimeout(r, 1500));
+    setPaymentStatus("processing");
+    await new Promise(r => setTimeout(r, 2500));
+    setPaymentStatus("success");
+    await new Promise(r => setTimeout(r, 800));
+    finalizeOrder();
+  };
+
+  const handlePlaceOrder = () => {
     const newErrors: FormErrors = {};
-    const requiredFields: (keyof FormErrors)[] = ["name", "email", "phone", "address1", "city", "state", "pincode"];
-    requiredFields.forEach((f) => {
-      const err = validateField(f, formData[f]);
+    const req = ["name", "email", "phone", "address1", "city", "state", "pincode"];
+    req.forEach((f) => {
+      const err = validateField(f, formData[f as keyof CheckoutFormData]);
       if (err) newErrors[f] = err;
     });
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setTouched(Object.fromEntries(requiredFields.map((f) => [f, true])));
-      // Scroll to first error
-      const firstErrorField = requiredFields.find((f) => newErrors[f]);
-      if (firstErrorField) {
-        document.querySelector(`[name="${firstErrorField}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      setTouched(Object.fromEntries(req.map((f) => [f, true])));
       return;
     }
 
-    if (items.length === 0) return;
-
-    setIsProcessing(true);
-
-    try {
-      // Simulate order processing (replace with real Razorpay/API later)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Generate unique order number
-      const timestamp = Date.now().toString(36).toUpperCase();
-      const random = Math.floor(Math.random() * 999).toString().padStart(3, "0");
-      const orderNumber = `LW-${timestamp.slice(-4)}${random}`;
-
-      // Save complete order data to localStorage
-      const orderData = {
-        orderNumber,
-        items: items.map((item) => ({
-          productId: item.productId,
-          name: item.name,
-          phoneModel: item.phoneModel,
-          color: item.color,
-          quantity: item.quantity,
-          price: item.price,
-          mrp: item.mrp,
-          image: item.image,
-        })),
-        subtotal,
-        savings,
-        shippingCost,
-        prepaidDiscount,
-        total: grandTotal,
-        paymentMethod,
-        customerName: formData.name.trim(),
-        customerEmail: formData.email.trim().toLowerCase(),
-        customerPhone: formData.phone,
-        shippingAddress: {
-          address1: formData.address1.trim(),
-          address2: formData.address2.trim(),
-          city: formData.city.trim(),
-          state: formData.state,
-          pincode: formData.pincode,
-        },
-        orderDate: new Date().toISOString(),
-      };
-
-      localStorage.setItem("lastOrder", JSON.stringify(orderData));
-      clearCart();
-      window.location.href = "/order-confirmation";
-    } catch {
-      setIsProcessing(false);
-      alert("Something went wrong. Please try again.");
+    if (paymentMethod === "online") {
+      triggerPaymentSim();
+    } else {
+      setIsProcessing(true);
+      setTimeout(finalizeOrder, 1500);
     }
   };
 
-  // ── Input helper ──
-  const inputClass = (name: string) =>
-    `w-full border rounded-xl px-4 py-2.5 text-sm text-text-primary focus:ring-2 outline-none transition-all bg-gray-50 ${
-      errors[name as keyof FormErrors] && touched[name]
-        ? "border-red-400 focus:border-red-400 focus:ring-red-100"
-        : "border-gray-200 focus:border-accent focus:ring-accent/10"
-    }`;
+  const finalizeOrder = () => {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const orderNumber = `LW-${timestamp.slice(-4)}${Math.floor(Math.random()*999).toString().padStart(3,"0")}`;
 
-  // ── Empty cart state ──
-  if (items.length === 0) {
+    localStorage.setItem("lastOrder", JSON.stringify({
+      orderNumber, items, subtotal, savings, shippingCost, prepaidDiscount,
+      total: grandTotal, paymentMethod, customerName: formData.name, orderDate: new Date().toISOString(),
+    }));
+    clearCart();
+    window.location.href = "/order-confirmation";
+  };
+
+  // Floating Input Component
+  const FloatingInput = ({ label, name, type = "text", maxLength, inputMode, isSelect = false }: any) => {
+    const hasError = errors[name] && touched[name];
+    const isValid = !errors[name] && touched[name] && formData[name as keyof CheckoutFormData].length > 0;
+    
     return (
-      <div className="min-h-screen bg-white">
-        <div className="fixed top-0 left-0 right-0 z-50"><AnnouncementBar /></div>
-        <div className="fixed top-[32px] left-0 right-0 z-40">
-          <nav className="bg-white/95 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-              <Link href="/" className="flex items-center gap-2">
-                <span className="text-xl font-heading font-bold text-text-primary">LUXEWRAP</span>
-                <span className="text-[10px] text-accent font-semibold tracking-widest">INDIA</span>
-              </Link>
-            </div>
-          </nav>
+      <div className="relative group">
+        {isSelect ? (
+          <select
+            name={name} value={formData[name as keyof CheckoutFormData]}
+            onChange={handleChange} onBlur={handleBlur}
+            className={`block px-4 pb-2.5 pt-6 w-full text-sm text-text-primary bg-white rounded-xl border appearance-none focus:outline-none focus:ring-0 peer transition-colors ${
+              hasError ? "border-red-500 focus:border-red-500" : isValid ? "border-green-500 focus:border-green-500" : "border-gray-200 focus:border-accent"
+            }`}
+          >
+            <option value="">Select...</option>
+            {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+        ) : (
+          <input
+            type={type} name={name} value={formData[name as keyof CheckoutFormData]}
+            onChange={handleChange} onBlur={handleBlur} maxLength={maxLength} inputMode={inputMode}
+            className={`block px-4 pb-2.5 pt-6 w-full text-sm text-text-primary bg-white rounded-xl border appearance-none focus:outline-none focus:ring-0 peer transition-colors ${
+              hasError ? "border-red-500 focus:border-red-500" : isValid ? "border-green-500 focus:border-green-500" : "border-gray-200 focus:border-accent"
+            }`}
+            placeholder=" "
+          />
+        )}
+        <label className={`absolute text-sm duration-300 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3 ${
+          hasError ? "text-red-500" : isValid ? "text-green-600" : "text-text-muted peer-focus:text-accent"
+        }`}>
+          {label}
+        </label>
+        
+        {/* Status Icons */}
+        <div className="absolute top-4 right-4 pointer-events-none">
+          {hasError && <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          {isValid && <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>}
         </div>
-        <div className="flex items-center justify-center min-h-screen pt-[88px]">
-          <div className="text-center px-4">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
-              <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-heading font-bold text-text-primary mb-2">Your cart is empty</h1>
-            <p className="text-text-secondary text-sm mb-6">Add some products before checking out.</p>
-            <Link href="/#products" className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-3.5 rounded-xl transition-all text-sm inline-block">
-              SHOP NOW
-            </Link>
-          </div>
-        </div>
+        
+        {hasError && <p className="mt-1 text-xs text-red-500 font-medium px-1">{errors[name]}</p>}
       </div>
     );
-  }
+  };
+
+  if (!mounted) return null;
+  if (items.length === 0) return <div className="min-h-screen pt-[100px] text-center text-xl">Cart is empty. Returning...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      <CartSidebar />
-      <WhatsAppButton />
-
-      {/* Header */}
       <div className="fixed top-0 left-0 right-0 z-50"><AnnouncementBar /></div>
-      <div className="fixed top-[32px] left-0 right-0 z-40">
-        <nav className="bg-white/95 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-heading font-bold text-text-primary">LUXEWRAP</span>
-              <span className="text-[10px] text-accent font-semibold tracking-widest">INDIA</span>
-            </Link>
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span className="text-sm text-text-secondary font-medium">Secure Checkout</span>
-            </div>
+      <div className="fixed top-[32px] left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-2xl font-heading font-black tracking-tight text-text-primary">LUXEWRAP</span>
+          </Link>
+          <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            <span className="text-[11px] font-bold tracking-wide uppercase">Secure SSL Checkout</span>
           </div>
-        </nav>
+        </div>
       </div>
 
-      <main className="pt-[100px] pb-16">
+      <main className="pt-[110px] pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-text-muted mb-6">
-            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-            <span>›</span>
-            <Link href="/#products" className="hover:text-accent transition-colors">Shop</Link>
-            <span>›</span>
-            <span className="text-text-primary font-medium">Checkout</span>
+          
+          {/* Visual Progress Tracker */}
+          <div className="flex items-center justify-center mb-10 max-w-lg mx-auto">
+            <div className="flex items-center text-accent font-bold text-sm gap-2">
+              <span className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs">✓</span> Cart
+            </div>
+            <div className="h-px bg-accent w-12 mx-3"></div>
+            <div className="flex items-center text-accent font-bold text-sm gap-2">
+              <span className="w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center text-xs">2</span> Shipping
+            </div>
+            <div className="h-px bg-gray-300 w-12 mx-3"></div>
+            <div className="flex items-center text-gray-400 font-bold text-sm gap-2">
+              <span className="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs">3</span> Payment
+            </div>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary mb-8">
-            Checkout
-          </h1>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* ── LEFT: Forms (2 cols) ── */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Step 1: Customer Info */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-sm">
-                <h2 className="text-lg font-semibold text-text-primary mb-5 flex items-center gap-3">
-                  <span className="w-7 h-7 bg-accent text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
-                  Customer Information
-                </h2>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Name */}
-                  <div>
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Full Name *</label>
-                    <input
-                      type="text" name="name" value={formData.name}
-                      onChange={handleChange} onBlur={handleBlur}
-                      placeholder="Enter your full name"
-                      autoComplete="name"
-                      className={inputClass("name")}
-                    />
-                    {errors.name && touched.name && (
-                      <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-                    )}
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Email *</label>
-                    <input
-                      type="email" name="email" value={formData.email}
-                      onChange={handleChange} onBlur={handleBlur}
-                      placeholder="your@email.com"
-                      autoComplete="email"
-                      className={inputClass("email")}
-                    />
-                    {errors.email && touched.email && (
-                      <p className="text-xs text-red-500 mt-1">{errors.email}</p>
-                    )}
-                  </div>
-
-                  {/* Phone */}
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Phone (+91) *</label>
-                    <div className="flex">
-                      <span className="bg-gray-100 border border-r-0 border-gray-200 rounded-l-xl px-3 flex items-center text-sm text-text-muted font-medium">+91</span>
-                      <input
-                        type="tel" name="phone" value={formData.phone}
-                        onChange={handleChange} onBlur={handleBlur}
-                        placeholder="9876543210" maxLength={10}
-                        autoComplete="tel-national"
-                        inputMode="numeric"
-                        className={`${inputClass("phone")} rounded-l-none`}
-                      />
-                    </div>
-                    {errors.phone && touched.phone && (
-                      <p className="text-xs text-red-500 mt-1">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  {/* Address */}
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Address Line 1 *</label>
-                    <input
-                      type="text" name="address1" value={formData.address1}
-                      onChange={handleChange} onBlur={handleBlur}
-                      placeholder="House/Flat no., Street name"
-                      autoComplete="address-line1"
-                      className={inputClass("address1")}
-                    />
-                    {errors.address1 && touched.address1 && (
-                      <p className="text-xs text-red-500 mt-1">{errors.address1}</p>
-                    )}
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Address Line 2</label>
-                    <input
-                      type="text" name="address2" value={formData.address2}
-                      onChange={handleChange}
-                      placeholder="Landmark, Area (optional)"
-                      autoComplete="address-line2"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-text-primary focus:border-accent focus:ring-2 focus:ring-accent/10 outline-none transition-all bg-gray-50"
-                    />
-                  </div>
-
-                  {/* City + State + Pincode */}
-                  <div>
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">City *</label>
-                    <input
-                      type="text" name="city" value={formData.city}
-                      onChange={handleChange} onBlur={handleBlur}
-                      placeholder="Your city"
-                      autoComplete="address-level2"
-                      className={inputClass("city")}
-                    />
-                    {errors.city && touched.city && (
-                      <p className="text-xs text-red-500 mt-1">{errors.city}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">State *</label>
-                    <select
-                      name="state" value={formData.state}
-                      onChange={handleChange} onBlur={handleBlur}
-                      className={inputClass("state")}
-                    >
-                      <option value="">Select state</option>
-                      {INDIAN_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                    {errors.state && touched.state && (
-                      <p className="text-xs text-red-500 mt-1">{errors.state}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-text-secondary mb-1.5">Pincode *</label>
-                    <input
-                      type="text" name="pincode" value={formData.pincode}
-                      onChange={handleChange} onBlur={handleBlur}
-                      placeholder="6-digit pincode" maxLength={6}
-                      autoComplete="postal-code"
-                      inputMode="numeric"
-                      className={inputClass("pincode")}
-                    />
-                    {errors.pincode && touched.pincode && (
-                      <p className="text-xs text-red-500 mt-1">{errors.pincode}</p>
-                    )}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            
+            {/* ── LEFT: Checkout Flow ── */}
+            <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+              
+              {/* Form Section */}
+              <div>
+                <h2 className="text-xl font-heading font-bold text-text-primary mb-5">Shipping Information</h2>
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
+                    <div className="sm:col-span-2"><FloatingInput name="email" label="Email Address *" type="email" /></div>
+                    <FloatingInput name="name" label="Full Name *" />
+                    <FloatingInput name="phone" label="Phone Number (+91) *" type="tel" maxLength={10} inputMode="numeric" />
+                    <div className="sm:col-span-2"><FloatingInput name="address1" label="Street Address / Flat No. *" /></div>
+                    <div className="sm:col-span-2"><FloatingInput name="address2" label="Landmark (Optional)" /></div>
+                    <FloatingInput name="city" label="City *" />
+                    <FloatingInput name="state" label="State *" isSelect={true} />
+                    <FloatingInput name="pincode" label="Pincode *" type="tel" maxLength={6} inputMode="numeric" />
                   </div>
                 </div>
               </div>
 
-              {/* Step 2: Payment Method */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-sm">
-                <h2 className="text-lg font-semibold text-text-primary mb-5 flex items-center gap-3">
-                  <span className="w-7 h-7 bg-accent text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
-                  Payment Method
-                </h2>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Online */}
-                  <button
-                    onClick={() => setPaymentMethod("online")}
-                    className={`relative p-4 rounded-xl border-2 text-left transition-all ${
-                      paymentMethod === "online"
-                        ? "border-accent bg-accent/5 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        paymentMethod === "online" ? "border-accent" : "border-gray-300"
-                      }`}>
-                        {paymentMethod === "online" && <div className="w-2.5 h-2.5 rounded-full bg-accent" />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-text-primary">Pay Online</p>
-                        <p className="text-xs text-text-muted">UPI, Cards, NetBanking</p>
+              {/* Payment Section */}
+              <div>
+                <h2 className="text-xl font-heading font-bold text-text-primary mb-5">Payment Method</h2>
+                <div className="bg-white rounded-2xl p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 space-y-4">
+                  
+                  {/* Pay Online */}
+                  <label className={`block relative p-5 rounded-xl border-2 cursor-pointer transition-all ${
+                    paymentMethod === "online" ? "border-accent bg-accent/5" : "border-gray-200 hover:border-gray-300"
+                  }`}>
+                    <input type="radio" name="payment" value="online" checked={paymentMethod === "online"} onChange={() => setPaymentMethod("online")} className="hidden" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "online" ? "border-accent" : "border-gray-300"}`}>
+                          {paymentMethod === "online" && <div className="w-2.5 h-2.5 rounded-full bg-accent animate-fade-in" />}
+                        </div>
+                        <div>
+                          <p className="font-bold text-text-primary">Pay Online (UPI, Cards, NetBanking)</p>
+                          <div className="flex items-center gap-2 mt-1.5 opacity-60">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" className="h-3" />
+                            <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-3" />
+                            <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="MC" className="h-4" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                     {paymentMethod === "online" && (
-                      <div className="mt-3 bg-green-50 text-green-700 text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        You save ₹{50 + shippingCost}! Free delivery + ₹50 prepaid discount
+                      <div className="mt-4 bg-green-50 border border-green-100 text-green-700 text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 animate-fade-in">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                        Congrats! You unlock FREE Shipping + ₹50 prepaid discount.
                       </div>
                     )}
-                  </button>
+                  </label>
 
                   {/* COD */}
-                  <button
-                    onClick={() => setPaymentMethod("cod")}
-                    className={`relative p-4 rounded-xl border-2 text-left transition-all ${
-                      paymentMethod === "cod"
-                        ? "border-accent bg-accent/5 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        paymentMethod === "cod" ? "border-accent" : "border-gray-300"
-                      }`}>
-                        {paymentMethod === "cod" && <div className="w-2.5 h-2.5 rounded-full bg-accent" />}
+                  <label className={`block relative p-5 rounded-xl border-2 cursor-pointer transition-all ${
+                    paymentMethod === "cod" ? "border-accent bg-accent/5" : "border-gray-200 hover:border-gray-300"
+                  }`}>
+                    <input type="radio" name="payment" value="cod" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} className="hidden" />
+                    <div className="flex items-center gap-4">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "cod" ? "border-accent" : "border-gray-300"}`}>
+                        {paymentMethod === "cod" && <div className="w-2.5 h-2.5 rounded-full bg-accent animate-fade-in" />}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-text-primary">Cash on Delivery</p>
-                        <p className="text-xs text-text-muted">₹50 shipping charge applicable</p>
+                        <p className="font-bold text-text-primary">Cash on Delivery</p>
+                        <p className="text-xs text-text-muted mt-0.5">₹50 additional shipping fee applies</p>
                       </div>
                     </div>
-                  </button>
+                  </label>
                 </div>
               </div>
+
             </div>
 
             {/* ── RIGHT: Order Summary ── */}
-            <div className="lg:col-span-1">
-              <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 sticky top-[100px] shadow-sm">
-                <h2 className="text-lg font-semibold text-text-primary mb-4 flex items-center justify-between">
-                  Order Summary
-                  <span className="text-xs text-text-muted font-normal">{totalQty} {totalQty === 1 ? "item" : "items"}</span>
-                </h2>
-
-                {/* Cart Items */}
-                <div className="space-y-3 max-h-60 overflow-y-auto mb-4 pr-1">
-                  {items.map((item) => (
-                    <div key={item.productId} className="flex gap-3">
-                      <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-gray-100 flex-shrink-0 bg-gray-50">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                        <span className="absolute -top-1 -right-1 bg-accent text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+            <div className="lg:col-span-5 xl:col-span-4">
+              <div className="bg-white border border-gray-100 shadow-2xl rounded-3xl p-6 sticky top-[120px]">
+                <h3 className="text-lg font-heading font-bold text-text-primary mb-6">Order Summary</h3>
+                
+                {/* Visual Items */}
+                <div className="space-y-4 mb-6 pr-2">
+                  {items.map(item => (
+                    <div key={item.productId} className="flex gap-4">
+                      <div className="relative w-16 h-16 rounded-xl border border-gray-100 bg-gray-50 flex-shrink-0">
+                        {item.image && <Image src={item.image} alt={item.name} fill className="object-cover rounded-xl" sizes="64px" />}
+                        <span className="absolute -top-2 -right-2 bg-text-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
                           {item.quantity}
                         </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-text-primary truncate">
-                          {item.name}
-                        </p>
-                        <p className="text-[10px] text-text-muted">{item.phoneModel} · {item.color}</p>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs font-semibold text-text-primary">{formatPrice(item.price * item.quantity)}</span>
-                          {item.mrp > item.price && (
-                            <span className="text-[10px] text-text-muted line-through">{formatPrice(item.mrp * item.quantity)}</span>
-                          )}
-                        </div>
+                      <div className="flex-1 min-w-0 pt-1">
+                        <p className="text-sm font-bold text-text-primary leading-tight truncate">{item.name}</p>
+                        <p className="text-xs text-text-muted mt-0.5">{item.phoneModel} · {item.color}</p>
+                        <p className="text-sm font-black text-text-primary mt-1">{formatPrice(item.price * item.quantity)}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <hr className="border-gray-100 my-4" />
+                <div className="h-px bg-gray-100 w-full mb-6" />
 
-                {/* Totals */}
-                <div className="space-y-2 text-sm">
+                {/* Totals Breakdown */}
+                <div className="space-y-3 text-sm">
                   <div className="flex justify-between text-text-secondary">
-                    <span>Subtotal ({totalQty} {totalQty === 1 ? "item" : "items"})</span>
-                    <span className="tabular-nums">{formatPrice(subtotal)}</span>
+                    <span>Subtotal</span>
+                    <span className="font-medium text-text-primary">{formatPrice(subtotal)}</span>
                   </div>
                   {savings > 0 && (
                     <div className="flex justify-between text-green-600">
-                      <span>MRP Savings</span>
-                      <span className="tabular-nums">-{formatPrice(savings)}</span>
+                      <span>Discount</span>
+                      <span className="font-bold">-{formatPrice(savings)}</span>
                     </div>
                   )}
                   {prepaidDiscount > 0 && (
                     <div className="flex justify-between text-green-600">
-                      <span>Prepaid Discount</span>
-                      <span className="tabular-nums">-{formatPrice(prepaidDiscount)}</span>
+                      <span>Prepaid Offer</span>
+                      <span className="font-bold">-{formatPrice(prepaidDiscount)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-text-secondary">
                     <span>Shipping</span>
-                    <span className={shippingCost === 0 ? "text-green-600 font-medium" : "tabular-nums"}>
+                    <span className={shippingCost === 0 ? "text-green-600 font-bold" : "font-medium text-text-primary"}>
                       {shippingCost === 0 ? "FREE" : formatPrice(shippingCost)}
                     </span>
                   </div>
-                  <hr className="border-gray-100" />
-                  <div className="flex justify-between text-base font-bold text-text-primary pt-1">
-                    <span>Total</span>
-                    <span className="text-accent tabular-nums">{formatPrice(grandTotal)}</span>
-                  </div>
-                  {totalSavings > 0 && (
-                    <p className="text-xs text-green-600 font-medium text-right">
-                      Total savings: {formatPrice(totalSavings)}
-                    </p>
-                  )}
                 </div>
 
-                {/* Place Order Button */}
+                <div className="mt-6 pt-5 border-t-2 border-dashed border-gray-200">
+                  <div className="flex justify-between items-end">
+                    <span className="text-base font-bold text-text-primary">Total to Pay</span>
+                    <span className="text-3xl font-black text-accent tracking-tight">{formatPrice(grandTotal)}</span>
+                  </div>
+                </div>
+
                 <button
                   onClick={handlePlaceOrder}
                   disabled={!isFormValid || isProcessing}
-                  className="w-full mt-6 bg-accent hover:bg-accent-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-all text-sm tracking-wide flex items-center justify-center gap-2 hover:shadow-glow"
+                  className="relative w-full mt-8 bg-accent hover:bg-accent-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-base font-black py-4 rounded-xl transition-all hover:shadow-glow active:scale-95 group overflow-hidden"
                 >
-                  {isProcessing ? (
-                    <>
-                      <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      Processing order...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                      PLACE ORDER • {formatPrice(grandTotal)}
-                    </>
-                  )}
+                  <span className="relative z-10 flex items-center justify-center gap-2 tracking-wide">
+                    {isProcessing ? "PROCESSING..." : "PAY & PLACE ORDER"}
+                    {!isProcessing && <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>}
+                  </span>
+                  {!isProcessing && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />}
                 </button>
-
-                {/* Trust Icons */}
-                <div className="grid grid-cols-3 gap-2 mt-4">
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <span className="text-[9px] text-text-muted leading-tight">Secure Payment</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                    </svg>
-                    <span className="text-[9px] text-text-muted leading-tight">Fast Delivery</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span className="text-[9px] text-text-muted leading-tight">100% Genuine</span>
-                  </div>
-                </div>
               </div>
             </div>
+
           </div>
         </div>
       </main>
-
       <Footer />
+
+      {/* ── SIMULATED PAYMENT MODAL ── */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div className="relative bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-slide-up">
+            {/* Header */}
+            <div className="bg-blue-600 px-6 py-4 flex items-center justify-between">
+              <span className="text-white font-black tracking-widest italic text-xl">RAZORPAY</span>
+              <span className="text-blue-100 text-xs font-medium bg-blue-700/50 px-2 py-1 rounded">Test Mode</span>
+            </div>
+            
+            {/* Body */}
+            <div className="px-6 py-8 flex flex-col items-center text-center min-h-[250px] justify-center">
+              {paymentStatus === "initializing" && (
+                <div className="animate-fade-in">
+                  <div className="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
+                  <p className="text-text-primary font-bold text-lg">Initializing Payment...</p>
+                  <p className="text-sm text-text-muted mt-1">Please do not refresh</p>
+                </div>
+              )}
+              {paymentStatus === "processing" && (
+                <div className="animate-fade-in">
+                  <div className="w-12 h-12 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
+                  <p className="text-text-primary font-bold text-lg">Processing {formatPrice(grandTotal)}</p>
+                  <p className="text-sm text-text-muted mt-1">Connecting to bank securely...</p>
+                </div>
+              )}
+              {paymentStatus === "success" && (
+                <div className="animate-slide-up">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/30">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <p className="text-green-600 font-black text-xl">Payment Successful!</p>
+                  <p className="text-sm text-text-muted mt-1">Redirecting to receipt...</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Footer */}
+            <div className="bg-gray-50 px-6 py-3 border-t border-gray-100 flex items-center justify-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Secured by 256-bit encryption</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

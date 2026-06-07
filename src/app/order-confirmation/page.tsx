@@ -5,6 +5,7 @@ import Link from "next/link";
 import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import Footer from "@/components/ui/Footer";
 import { formatPrice } from "@/lib/utils";
+import confetti from "canvas-confetti";
 
 // ═══════════════════════════════════════════
 // ORDER CONFIRMATION PAGE — Success state
@@ -56,6 +57,24 @@ export default function OrderConfirmationPage() {
       // Corrupted localStorage data
     }
   }, []);
+
+  useEffect(() => {
+    if (order) {
+      // Fire confetti celebration
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      const frame = () => {
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ["#FA7000", "#22C55E", "#3B82F6"] });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ["#FA7000", "#22C55E", "#3B82F6"] });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+      frame();
+    }
+  }, [order]);
 
   if (!order) {
     return (
@@ -211,24 +230,46 @@ export default function OrderConfirmationPage() {
             </div>
           </div>
 
-          {/* Next Steps */}
-          <div className="mt-8 space-y-3">
-            <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <div>
-                <p className="text-sm font-medium text-text-primary">Order confirmation sent</p>
-                <p className="text-xs text-text-muted">Check {order.customerEmail} for details.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-              <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-              </svg>
-              <div>
-                <p className="text-sm font-medium text-text-primary">Estimated delivery: 3–7 business days</p>
-                <p className="text-xs text-text-muted">We&apos;ll share tracking details once shipped.</p>
+          {/* Next Steps Timeline */}
+          <div className="mt-8">
+            <h3 className="text-sm font-bold text-text-primary mb-4 px-2">Order Status</h3>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+              <div className="relative">
+                {/* Timeline Line */}
+                <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-100" />
+                
+                {/* Steps */}
+                <div className="space-y-6 relative">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 z-10 shadow-sm shadow-green-500/20">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <div className="pt-1">
+                      <p className="text-sm font-bold text-text-primary">Order Confirmed</p>
+                      <p className="text-[11px] text-text-muted mt-0.5">We've received your order and are preparing it.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center flex-shrink-0 z-10 shadow-sm shadow-accent/20 animate-pulse">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    </div>
+                    <div className="pt-1 opacity-80">
+                      <p className="text-sm font-bold text-text-primary">Processing</p>
+                      <p className="text-[11px] text-text-muted mt-0.5">Quality check and packaging in progress.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center flex-shrink-0 z-10">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    </div>
+                    <div className="pt-1 opacity-50">
+                      <p className="text-sm font-bold text-text-primary">Shipped</p>
+                      <p className="text-[11px] text-text-muted mt-0.5">Estimated delivery: 3-5 business days.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

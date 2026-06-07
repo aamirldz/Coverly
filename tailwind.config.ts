@@ -48,8 +48,12 @@ const config: Config = {
         "fade-in": "fade-in 0.5s ease-out",
         "bounce-slow": "bounce 2s infinite",
         "spin-slow": "spin 20s linear infinite",
+        "shimmer": "shimmer 1.5s infinite",
       },
       keyframes: {
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
