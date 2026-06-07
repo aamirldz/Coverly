@@ -7,7 +7,7 @@
 // ═══════════════════════════════════════════
 
 export default function WhatsAppButton() {
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919939525676";
+  const phoneNumber = "919939525676";
   const message = encodeURIComponent(
     "Hi! I have a question about LuxeWrap cases."
   );
