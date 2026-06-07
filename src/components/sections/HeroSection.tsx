@@ -76,12 +76,9 @@ export default function HeroSection() {
           <div className="text-center lg:text-left order-1 lg:order-1">
             {/* Badge */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
-              <span className="inline-flex items-center gap-2 bg-accent/10 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-accent/20">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
-                </span>
-                India&apos;s #1 Premium Cases
+              <span className="inline-flex items-center gap-2 bg-orange-50 text-accent text-[11px] font-semibold px-3 py-1 rounded-full mb-3 sm:mb-5 border border-orange-200 shadow-sm">
+                <span className="rounded-full h-1.5 w-1.5 bg-accent" />
+                India's #1 Premium Cases
               </span>
             </div>
 
@@ -91,10 +88,10 @@ export default function HeroSection() {
                 <span className="text-gray-900">LUXE</span>
                 <span className="bg-gradient-to-r from-accent via-orange-500 to-amber-500 bg-clip-text text-transparent">WRAP</span>
               </h1>
-              <div className="flex items-center gap-2 justify-center lg:justify-start mt-1">
-                <div className="h-px w-6 sm:w-10 bg-accent/30" />
-                <p className="text-accent text-[10px] sm:text-xs font-bold tracking-[0.5em]">INDIA</p>
-                <div className="h-px w-6 sm:w-10 bg-accent/30" />
+              <div className="flex items-center justify-center lg:justify-start mt-2">
+                <div className="h-px w-10 sm:w-16 bg-orange-200 mr-3" />
+                <p className="text-accent text-[10px] sm:text-xs font-bold tracking-[0.4em]">INDIA</p>
+                <div className="h-px w-10 sm:w-16 bg-orange-200 ml-3" />
               </div>
             </div>
 
