@@ -216,7 +216,7 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-text-secondary hover:text-accent transition-colors"
+            className="md:hidden text-text-secondary hover:text-accent transition-colors p-2 -mr-2"
             aria-label="Menu"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

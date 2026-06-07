@@ -87,7 +87,7 @@ export default function HeroSection() {
 
             {/* Brand Name */}
             <div className={`${mounted ? "hero-text-animate" : "opacity-0"}`}>
-              <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[0.9]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight leading-[1.1] sm:leading-[0.9]">
                 <span className="text-gray-900">LUXE</span>
                 <span className="bg-gradient-to-r from-accent via-orange-500 to-amber-500 bg-clip-text text-transparent">WRAP</span>
               </h1>
@@ -99,7 +99,7 @@ export default function HeroSection() {
             </div>
 
             {/* Tagline */}
-            <p className={`text-lg sm:text-xl md:text-2xl text-gray-600 mt-3 sm:mt-5 font-medium leading-snug ${
+            <p className={`text-base sm:text-xl md:text-2xl text-gray-600 mt-3 sm:mt-5 font-medium leading-snug ${
               mounted ? "hero-text-animate hero-text-animate-delay-1" : "opacity-0"
             }`}>
               Wrap Your World in{" "}
@@ -177,6 +177,7 @@ export default function HeroSection() {
                       fill
                       className="object-cover"
                       priority={index === 0}
+                      sizes="(max-width: 640px) 200px, (max-width: 1024px) 320px, 400px"
                     />
                   </div>
                 ))}

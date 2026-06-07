@@ -215,7 +215,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="cart-button-wrapper p-3 sm:p-4 pt-0">
             <button
               onClick={handleAddToCart}
-              className="w-full bg-accent hover:bg-accent-dark text-white text-xs sm:text-sm font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-accent hover:bg-accent-dark text-white text-xs sm:text-sm font-bold py-3 sm:py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
