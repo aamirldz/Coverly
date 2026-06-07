@@ -3,7 +3,6 @@
 import Navbar from "@/components/ui/Navbar";
 import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import HeroSection from "@/components/sections/HeroSection";
-import TrustSection from "@/components/sections/TrustSection";
 import PhoneModelSelector from "@/components/sections/PhoneModelSelector";
 import TrendingCarousel from "@/components/sections/TrendingCarousel";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
@@ -39,9 +38,6 @@ export default function HomePage() {
       <main className="pt-[88px]">
         {/* ═══ HERO ═══ */}
         <HeroSection />
-
-        {/* ═══ TRUST STRIP (compact icon row) ═══ */}
-        <TrustSection />
 
         {/* ═══ PHONE MODEL SELECTOR ═══ */}
         <PhoneModelSelector />
