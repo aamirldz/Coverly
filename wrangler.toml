@@ -7,4 +7,4 @@ pages_build_output_dir = ".vercel/output/static"
 [[d1_databases]]
 binding = "DB"
 database_name = "coverly-db"
-database_id = "757c3650-1317-4672-ac94-6773a7c10bbd"
+database_id = "87c26c9e-c390-419d-9aab-8851bf75ee60"
